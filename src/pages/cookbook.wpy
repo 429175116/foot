@@ -1,0 +1,483 @@
+<style lang="less">
+  .containertop {
+    width: 95%;
+    height: 85rpx;
+    line-height: 85rpx;
+    margin: 15rpx auto;
+  }
+
+  .containertopSearch {
+    height: 80rpx;
+    line-height: 80rpx;
+    border: 3rpx solid #B2B2B2;
+    border-radius: 40rpx;
+    text-align: center;
+    font-size: 40rpx;
+  }
+
+  .containerleft {
+    height: 100vh;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    background: #eee;
+    float: left;
+    width: 25%;
+  }
+  .catgegory {
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    /*background: #eee;*/
+    display: inline-block;
+    text-align: center;
+    border-bottom: 1rpx solid #E5E5E5;
+  }
+  .active {
+    background: #fff;
+    color: #E64340;
+  }
+  .container1 {
+    height: 100vh;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    /*background: #eee;*/
+    float: right;
+    width: 75%;
+  }
+  .organic_rice{
+    background:#fff;
+    width:100%;
+    border-bottom:1px solid #E5E5E5;
+    height:150rpx;
+    display:flex;
+    padding:25rpx 0;
+  }
+  .organic_rice_pic{
+    float:left;
+    flex:0 0 150rpx;
+    height:150rpx;
+    margin:0 25rpx;
+  }
+  .organic_rice_text{
+    float:left;
+    flex:1;
+  }
+  .rice {
+    font-size:30rpx;
+  }
+  .sale{
+    color:#999999;
+    font-size:24rpx;
+  }
+  .discount{
+    color:#E64340;
+  }
+  .discount_price{
+    color:#B2B2B2;
+    font-size:25rpx;
+  }
+
+  .increase{
+    flex:0 0 32px;
+    font-weight:400;
+    padding:3px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .iconfont{
+    line-height:32px;
+    font-size:24px;
+    color:#00dc4c;
+    font-family:"iconfont" !important;
+    font-style:normal;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-stroke-width:.2px;
+    -moz-osx-font-smoothing:grayscale;
+    color: #E64340
+  }
+  .decrease>.iconfont,.increase>.iconfont {
+    line-height:32px;
+    font-size:24px;
+    color:#00dc4c;
+  }
+
+  .icon-cart{
+    line-height:100rpx;
+    text-align:center;
+    width:100rpx;
+    font-size:64rpx;
+    color:#efefef;
+    border-radius:50%;
+    background:#999;
+  }
+  .icon-cart.products{
+    background:#E64340;
+    color:#fff;
+  }
+  .cart{
+    z-index:10;
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    width:100rpx;
+    height:100rpx;
+  }
+  .bardge{
+    position:absolute;
+    top:0;
+    right:0;
+    width:40rpx;
+    height:40rpx;
+    font-size:18rpx;
+    text-align:center;
+    line-height:40rpx;
+    background:#4a4a4a;
+    color:#fff;
+    border-radius:50%;
+  }
+  .main-wrapper {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(0,0,0,0.6);
+  }
+  .shop-cart-wrapper {
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:500rpx;
+    background:#fff;
+  }
+  .operation-wrapper {
+    height:100rpx;
+    border-bottom:1rpx solid #efefef;
+    line-height:100rpx;
+    display:flex;
+    padding:0 10px;
+    justify-content:space-between;
+  }
+  .remove-all-wrapper {
+    color:#999;
+    font-size:12px;
+  }
+  .products-wrapper {
+    height:300rpx;
+    overflow-y:auto;
+  }
+  .product-item {
+    display:flex;
+    height:150rpx;
+    padding:15rpx 10px;
+    align-items:center;
+    border-bottom:1rpx solid #efefef;
+  }
+  .product-pic {
+    flex:0 0 120rpx;
+  }
+  .product-pic>image {
+    width:100%;
+    height:120rpx;
+  }
+  .product-info {
+    padding-left:10px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    border-radius:4px;
+  }
+  .product-cart-control {
+    flex:0 0 120px;
+    align-self:flex-end;
+  }
+  .controller-wrapper {
+    display:flex;
+    width:120px;
+    overflow:visible;
+    border-radius:0;
+    color:#d6d6d6;
+    height:32px;
+  }
+  .controller-wrapper {
+    flex:0 0 120px;
+    align-self:flex-end;
+    margin-right:25rpx;
+  }
+  .decrease,.increase {
+    flex:0 0 32px;
+    font-weight:400;
+    padding:3px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .count-wrapper {
+    flex:1;
+    display:flex;
+    justify-content:center;
+  }
+  .count {
+    flex:1;
+    text-align:center;
+    display:inline-block;
+    padding:3px;
+    line-height:26px;
+    color:#666;
+  }
+  .payment-wrapper {
+    height:100rpx;
+    display:flex;
+    background:#efefef;
+    justify-content:space-between;
+  }
+  .price-wrapper {
+    display:flex;
+    flex-direction:column;
+    padding-left:150rpx;
+  }
+  .price {
+    color:#E64340;
+    font-size:18px;
+  }
+  .delivery-price {
+    font-size:12px;
+    color:#999;
+  }
+  .goto-payment-wrapper {
+    background:#E64340;
+    width:200rpx;
+    text-align:center;
+    color:#fff;
+    line-height:100rpx;
+  }
+</style>
+<template>
+  <view>
+    <view class="containertop">
+      <input type="text" class="containertopSearch" placeholder="搜索商品名称">
+    </view>
+    <view class="containerleft">
+      <repeat for="{{ category }}" item="item">
+        <!-- <li wx:if='{{ item.hidden == 0 }}' class="catgegory notactive" @tap="changeCategory" data-id='{{ item.id }}'>{{ item.name }}</li>
+        <li wx:else class="catgegory active" @tap="changeCategory" data-id='{{ item.id }}'>{{ item.name }}</li> -->
+      </repeat>
+      <li class="catgegory active" data-id="1">菜单1</li>
+      <li class="catgegory notactive" data-id="1">菜单1</li>
+      <li class="catgegory notactive" data-id="1">菜单1</li>
+      <li class="catgegory notactive" data-id="1">菜单1</li>
+      <li class="catgegory notactive" data-id="1">菜单1</li>
+    </view>
+    <view class="container1">
+      <view class="organic_rice" data-wpygotoproduct-a="1">
+        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        <view class="organic_rice_text">
+          <view class="rice">海贼王路飞</view>
+          <view class="sale">莫名的牛逼</view>
+          <view class="sale">销量0 | 在售</view>
+          <view class="discount">
+            ￥20.00
+            <span class="discount_price">元/份</span>
+          </view>
+        </view>
+        <view class="increase" data-wpyincreaseshop-a="">
+          <icon class="iconfont">+</icon>
+        </view>
+      </view>
+      <view class="organic_rice" data-wpygotoproduct-a="1">
+        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        <view class="organic_rice_text">
+          <view class="rice">海贼王路飞</view>
+          <view class="sale">莫名的牛逼</view>
+          <view class="sale">销量0 | 在售</view>
+          <view class="discount">
+            ￥20.00
+            <span class="discount_price">元/份</span>
+          </view>
+        </view>
+        <view class="increase" data-wpyincreaseshop-a="">
+          <icon class="iconfont">+</icon>
+        </view>
+      </view>
+      <view class="organic_rice" data-wpygotoproduct-a="1">
+        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        <view class="organic_rice_text">
+          <view class="rice">海贼王路飞</view>
+          <view class="sale">莫名的牛逼</view>
+          <view class="sale">销量0 | 在售</view>
+          <view class="discount">
+            ￥20.00
+            <span class="discount_price">元/份</span>
+          </view>
+        </view>
+        <view class="increase" data-wpyincreaseshop-a="">
+          <icon class="iconfont">+</icon>
+        </view>
+      </view>
+    </view>
+    <view>
+      <view class="cart">
+        <text class="bardge">2</text>
+        <icon class="iconfont icon-cart products">车</icon>
+      </view>
+      <view class="main-wrapper">
+        <view class="shop-cart-wrapper">
+          <view class="operation-wrapper">
+            <view class="select-all-wrapper">
+              <checkbox-group>
+                <checkbox value="true" checked=""></checkbox>选择全部
+              </checkbox-group>
+            </view>
+            <view class="remove-all-wrapper">
+              <icon class="iconfont">-</icon>
+              清空
+            </view>
+          </view>
+          <view class="products-wrapper">
+            <view class="product-item">
+              <view>
+                <checkbox-group data-wpychangeselect-a="">
+                  <checkbox value="1" checked=""></checkbox>
+                </checkbox-group>
+              </view>
+              <view class="product-pic">
+                <image src="" />
+              </view>
+              <view class="product-info">
+                <text>海贼王路飞</text>
+                <text>￥ 25.00</text>
+              </view>
+              <view class="product-cart-control">
+                <view class="controller-wrapper">
+                  <view class="decrease" data-com-index="0">
+                    <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
+                  </view>
+                  <view class="count-wrapper" data-com-index="0" index="0">
+                    <picker data-com-index="0" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
+                      <view class="count">2</view>
+                    </picker>
+                  </view>
+                  <view class="increase" data-com-index="0">
+                    <icon class="iconfont" style="color: #E64340">+</icon>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="payment-wrapper">
+            <view class="price-wrapper">
+              <text class="price">￥ 50元</text>
+              <text class="delivery-price">配送™滴香油</text>
+            </view>
+            <view class="goto-payment-wrapper">去结算</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class cookbook extends wepy.page {
+    config = {
+      navigationBarTitleText: '点餐啦'
+    }
+    components = {//, ReceiveCoupon
+      ShoppingCar, Advertise, ShopList
+    }
+    mixins = [CommonMixin]
+    data = {
+      carStatus: false,
+      carNum: 100,
+      mynum: 20,
+      product: [],
+      showOrHide: 'all-hide',
+      shoppingCar: {
+        num: 0,
+        product: []
+      },
+      bannerList: [],
+      category: [],
+      categoryid: 0,
+      active: 'notactive'
+    }
+
+    methods = {
+      handleViewTap() {
+        console.log('clicked')
+      }
+    }
+
+    watch = {
+      'categoryid': function (newValue, oldValue) {
+
+      }
+    }
+
+    getStorage() {
+      this.shoppingCar = wepy.getStorageSync('shoppingCar')
+    }
+
+    plusCount() {
+      this.showOrHide = 'all-show'
+    }
+
+    changeCategory(e) {
+      this.categoryid = e.currentTarget.dataset.id
+      var categoryid = e.currentTarget.dataset.id
+      var category = this.category
+      var i = 0
+      for (i in category) {
+        if (category[i].id === Number(categoryid)) {
+          category[i].hidden = 1
+        } else {
+          category[i].hidden = 0
+        }
+      }
+      this.category = category
+      this.$apply()
+      this.$invoke('ShopList', 'changeCategoryId')
+    }
+
+    productCategotyList() {
+      let params = {
+        bistro_id: 1
+      }
+      productCategotyList(params).then((ret) => {
+        var category = ret.data.product_categories.data
+        var i = 0
+        for (i in category) {
+          category[i].hidden = 0
+        }
+        this.category = category
+        this.category[0].hidden = 1
+        this.categoryid = this.category[0]['id']
+        this.$apply()
+        this.$invoke('ShopList', 'changeCategoryId')
+      })
+    }
+
+    getAllBanner() {
+      getAllBanners().then((ret) => {
+        if (ret.success) {
+          ret.data.forEach(v => {
+            this.bannerList.push({img_url: v.pic})
+          })
+        }
+        this.$apply()
+      })
+    }
+
+    onLoad(e) {
+      // this.productCategotyList()
+      this.$apply()
+    }
+  }
+</script>
