@@ -390,7 +390,7 @@
       navigationBarTitleText: '点餐啦'
     }
     components = {//, ReceiveCoupon
-      ShoppingCar, Advertise, ShopList
+
     }
     mixins = [CommonMixin]
     data = {
