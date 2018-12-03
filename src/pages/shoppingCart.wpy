@@ -162,91 +162,109 @@
   .orderInfo input{
     width: 100%;
   }
+  checkbox .wx-checkbox-input{
+   border-radius: 50%;/* 圆角 */
+   width: 40rpx; /* 背景的宽 */
+   height: 40rpx; /* 背景的高 */
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked{
+    border: none;
+    background: #fc6800;
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
+    border-radius: 50%;/* 圆角 */
+    width: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
+    height: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
+    line-height: 40rpx;
+    text-align: center;
+    font-size:30rpx; /* 对勾大小 30rpx */
+    color:#fff; /* 对勾颜色 白色 */
+    background: transparent;
+    transform:translate(-50%, -50%) scale(1);
+    -webkit-transform:translate(-50%, -50%) scale(1);
+  }
+
 </style>
 <template>
   <scroll-view scroll-y="hidden">
     <view class="list">
-      <view class="listCon">
-        <view class="sel">
-          <checkbox-group data-wpychangeselect-a="">
-            <checkbox value="1" checked=""></checkbox>
-          </checkbox-group>
-        </view>
-        <view class="sample">
-          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        </view>
-        <view class="info">
-          <view class="title">2048香辣蟹</view>
-          <view class="salesVolume">已售300份</view>
-          <view class="price">
-            <span>￥168</span>元/份
+      <checkbox-group bindchange="selCommodity" data-index="{{index}}" data-checks="{{item.checks}}">
+        <view class="listCon">
+          <view class="sel">
+            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
+          </view>
+          <view class="sample">
+            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+          </view>
+          <view class="info">
+            <view class="title">2048香辣蟹</view>
+            <view class="salesVolume">已售300份</view>
+            <view class="price">
+              <span>￥168</span>元/份
+            </view>
+          </view>
+          <view class="listConOperat">
+            <view class="del">
+              <image src="/img/delete.png" />
+            </view>
+            <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
+              <view class="num">11</view>
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+            </view>
           </view>
         </view>
-        <view class="listConOperat">
-          <view class="del">
-            <image src="/img/delete.png" />
+        <view class="listCon">
+          <view class="sel">
+            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
           </view>
-          <view class="conOperat">
-            <view class="numControl">-</view>
-            <view class="num">11</view>
-            <view class="numControl">+</view>
+          <view class="sample">
+            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
           </view>
-        </view>
-      </view>
-      <view class="listCon">
-        <view class="sel">
-          <checkbox-group data-wpychangeselect-a="">
-            <checkbox value="1" checked=""></checkbox>
-          </checkbox-group>
-        </view>
-        <view class="sample">
-          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        </view>
-        <view class="info">
-          <view class="title">2048香辣蟹</view>
-          <view class="salesVolume">已售300份</view>
-          <view class="price">
-            <span>￥168</span>元/份
+          <view class="info">
+            <view class="title">2048香辣蟹</view>
+            <view class="salesVolume">已售300份</view>
+            <view class="price">
+              <span>￥168</span>元/份
+            </view>
+          </view>
+          <view class="listConOperat">
+            <view class="del">
+              <image src="/img/delete.png" />
+            </view>
+            <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
+              <view class="num">11</view>
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+            </view>
           </view>
         </view>
-        <view class="listConOperat">
-          <view class="del">
-            <image src="/img/delete.png" />
+        <view class="listCon">
+          <view class="sel">
+            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
           </view>
-          <view class="conOperat">
-            <view class="numControl">-</view>
-            <view class="num">11</view>
-            <view class="numControl">+</view>
+          <view class="sample">
+            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
           </view>
-        </view>
-      </view>
-      <view class="listCon">
-        <view class="sel">
-          <checkbox-group data-wpychangeselect-a="">
-            <checkbox value="1" checked=""></checkbox>
-          </checkbox-group>
-        </view>
-        <view class="sample">
-          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        </view>
-        <view class="info">
-          <view class="title">2048香辣蟹</view>
-          <view class="salesVolume">已售300份</view>
-          <view class="price">
-            <span>￥168</span>元/份
+          <view class="info">
+            <view class="title">2048香辣蟹</view>
+            <view class="salesVolume">已售300份</view>
+            <view class="price">
+              <span>￥168</span>元/份
+            </view>
+          </view>
+          <view class="listConOperat">
+            <view class="del">
+              <image src="/img/delete.png" />
+            </view>
+            <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
+              <view class="num">11</view>
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+            </view>
           </view>
         </view>
-        <view class="listConOperat">
-          <view class="del">
-            <image src="/img/delete.png" />
-          </view>
-          <view class="conOperat">
-            <view class="numControl">-</view>
-            <view class="num">11</view>
-            <view class="numControl">+</view>
-          </view>
-        </view>
-      </view>
+      </checkbox-group>
     </view>
     <view class="orderInfo">
       <view class="orderInfoCon">
@@ -295,13 +313,56 @@ export default class Shoppingcart extends wepy.page {
   methods = {
 
   }
-
-
-  onLoad(e) {
-    // 获取用户信息
-    this.onGotUserInfo()
-    
+  onLoad(e) {}
+  // 选择购物车商品,获取商品在数组中的下标
+  selCommodity(e) {
+    this.cartIndex = e.detail.value
+    this.allPrice = this.getAllPrice()
   }
-
+  getAllPrice() {
+    let allPrice = 0
+    let index = this.cartIndex
+    let allListData = this.cartList
+    for (var i in index) {
+      allPrice += allListData[index[i]].num * allListData[index[i]].good_information.cost_beans
+    }
+    return allPrice
+  }
+  quantityUp(e) {
+    // 剩余商品数量
+    let storage = e.currentTarget.dataset.storage
+    // 商品数量
+    let num = e.currentTarget.dataset.num
+    // 下标
+    let index = e.currentTarget.dataset.index
+    if (num >= storage) {
+      wx.showModal({
+        title: '',
+        content: '剩余商品不足'
+      })
+      return
+    }
+    for (var i in this.cartIndex) {
+      this.cartList[this.cartIndex[i]].checks = true
+    }
+    this.cartList[index].num += 1
+    this.allPrice = this.getAllPrice()
+    this.$apply()
+  }
+  quantityDown(e) {
+    // 商品数量
+    let num = e.currentTarget.dataset.num
+    // 下标
+    let index = e.currentTarget.dataset.index
+    if (num === 1) {
+      return
+    }
+    for (var i in this.cartIndex) {
+      this.cartList[this.cartIndex[i]].checks = true
+    }
+    this.cartList[index].num -= 1
+    this.allPrice = this.getAllPrice()
+    this.$apply()
+  }
 }
 </script>

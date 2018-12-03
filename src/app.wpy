@@ -31,11 +31,9 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/roomList',
-      'pages/shoppingCart',
-      
-      
       'pages/index',
+      'pages/shoppingCart',
+      'pages/roomList',
       'pages/cookbook'
     ],
     window: {
@@ -47,7 +45,8 @@ export default class extends wepy.app {
   }
 
   globalData = {
-    userInfo: null
+    userInfo: null,
+    requestUrl: 'http://140.143.203.12:8094'
   }
 }
 </script>
