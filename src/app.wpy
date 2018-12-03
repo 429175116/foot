@@ -6,6 +6,16 @@
   icon {
     vertical-align:middle;
   }
+  .mask{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(51, 51, 51, 0.5);
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
 <script>
@@ -21,8 +31,9 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/shoppingCart',
       'pages/roomList',
+      'pages/shoppingCart',
+      
       
       'pages/index',
       'pages/cookbook'
