@@ -1,0 +1,121 @@
+<style lang="less">
+  scroll-view{
+    height: auto;
+  }
+  .list{
+    width: 750rpx;
+    height: auto;
+  }
+  .listCon{
+    width: 750rpx;
+    height: 185rpx;
+    border-bottom: 1rpx solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .listCon .img{
+    width: 195rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .listCon .img image{
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 70rpx;
+  }
+  .info{
+    width: 340rpx;
+    font-size: 30rpx;
+    color: #333;
+  }
+  .button{
+    width: 220rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .button view{
+    width: 160rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    background-color: #ff5536;
+    border-radius: 10rpx;
+    color: #fff;
+  }
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+    <view class="list">
+      <view class="listCon">
+        <view class="img">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view>猪豆豆请客单</view>
+          <view>桌号  A08</view>
+        </view>
+        <view class="button">
+          <view>加入</view>
+        </view>
+      </view>
+      <view class="listCon">
+        <view class="img">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view>猪豆豆请客单</view>
+          <view>桌号  A08</view>
+        </view>
+        <view class="button">
+          <view>加入</view>
+        </view>
+      </view>
+      <view class="listCon">
+        <view class="img">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view>猪豆豆请客单</view>
+          <view>桌号  A08</view>
+        </view>
+        <view class="button">
+          <view>加入</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class Roomlist extends wepy.page {
+  config = {
+    navigationBarTitleText: '房间'
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+    authorizationButton: true, // 控制授权按钮是否显示
+    userInfo: null,
+    avatarUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLRCZUOeCoWxrjGUrhTVFuvVLKRz08BUM6Y88qy8SxGuBDBKT97rRrYyXyrSNb2Exeuf6YXgVyreQ/132',
+    nickName: 'カイドウ様',
+    code: ''
+  }
+
+  methods = {
+    
+  }
+
+  watch = {
+
+  }
+
+  onLoad(e) {
+
+  }
+
+}
+</script>

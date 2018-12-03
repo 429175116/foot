@@ -392,7 +392,6 @@
     components = {//, ReceiveCoupon
 
     }
-    mixins = [CommonMixin]
     data = {
       carStatus: false,
       carNum: 100,
@@ -446,34 +445,34 @@
       this.$invoke('ShopList', 'changeCategoryId')
     }
 
-    productCategotyList() {
-      let params = {
-        bistro_id: 1
-      }
-      productCategotyList(params).then((ret) => {
-        var category = ret.data.product_categories.data
-        var i = 0
-        for (i in category) {
-          category[i].hidden = 0
-        }
-        this.category = category
-        this.category[0].hidden = 1
-        this.categoryid = this.category[0]['id']
-        this.$apply()
-        this.$invoke('ShopList', 'changeCategoryId')
-      })
-    }
+    // productCategotyList() {
+    //   let params = {
+    //     bistro_id: 1
+    //   }
+    //   productCategotyList(params).then((ret) => {
+    //     var category = ret.data.product_categories.data
+    //     var i = 0
+    //     for (i in category) {
+    //       category[i].hidden = 0
+    //     }
+    //     this.category = category
+    //     this.category[0].hidden = 1
+    //     this.categoryid = this.category[0]['id']
+    //     this.$apply()
+    //     this.$invoke('ShopList', 'changeCategoryId')
+    //   })
+    // }
 
-    getAllBanner() {
-      getAllBanners().then((ret) => {
-        if (ret.success) {
-          ret.data.forEach(v => {
-            this.bannerList.push({img_url: v.pic})
-          })
-        }
-        this.$apply()
-      })
-    }
+    // getAllBanner() {
+    //   getAllBanners().then((ret) => {
+    //     if (ret.success) {
+    //       ret.data.forEach(v => {
+    //         this.bannerList.push({img_url: v.pic})
+    //       })
+    //     }
+    //     this.$apply()
+    //   })
+    // }
 
     onLoad(e) {
       // this.productCategotyList()

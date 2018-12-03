@@ -21,6 +21,8 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
+      'pages/shoppingCart',
+      'pages/roomList',
       
       'pages/index',
       'pages/cookbook'
@@ -36,6 +38,5 @@ export default class extends wepy.app {
   globalData = {
     userInfo: null
   }
-
 }
 </script>

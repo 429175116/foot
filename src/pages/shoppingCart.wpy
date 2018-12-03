@@ -1,0 +1,307 @@
+<style lang="less">
+  page{
+    background-color: #e9e9e9;
+  }
+  scroll-view{
+    height: auto;
+  }
+  .operat{
+    width: 750rpx;
+    height: 100rpx;
+    position: fixed;
+    bottom: 0rpx;
+    box-shadow: 0px 0px 5px #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .operat view{
+    width: 375rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+  }
+  .foot{
+    color: #ff5536;
+    background-color: #fff;
+  }
+  .pay{
+    color: #fff;
+    background-color: #ff5536;;
+  }
+  .list{
+    background-color: #fff;
+    width: 750rpx;
+    height: auto;
+    
+  }
+  .listCon{
+    width: 750rpx;
+    height: 187rpx;
+    border: 1rpx solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  } 
+  .sel{
+    width: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sample{
+    width: 140rpx;
+  }
+  .sample image{
+    width: 140rpx;
+    height: 140rpx;
+  }
+  .info{
+    width: 350rpx;
+    // height: 100%;
+    padding: 27rpx;
+    color: #999;
+    font-size: 22rpx;
+  }
+  .info .title{
+    color: #333;
+    height: 30rpx;
+    line-height: 30rpx;
+  }
+  .info .salesVolume{
+    height: 55rpx;
+    line-height: 55rpx;
+  }
+  .info .price{
+    height: 60rpx;
+    line-height: 75rpx;
+  }
+  .info span{
+    color: #ff5536;
+  }
+  .listConOperat{
+    width: 185rpx;
+    height: 137rpx;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .listConOperat .del{
+    position: absolute;
+    right: 20rpx;
+    top: 0rpx;
+    width: 35rpx;
+    height: 35rpx;
+  }
+  .listConOperat .del image{
+    width: 35rpx;
+    height: 35rpx;
+  }
+  .listConOperat .numControl{
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border: 1rpx solid #999;
+    border-radius: 10rpx;
+    text-align: center;
+    color: #999;
+  }
+  .listConOperat .num{
+    width: auto;
+    min-width: 55rpx;
+    max-width: 100rpx;
+    line-height: 40rpx;
+    text-align: center;
+  }
+  .listConOperat .conOperat{
+    position: absolute;
+    height: 40rpx;
+    bottom: 0rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .orderInfo{
+    background-color: #fff;
+    margin-top: 10rpx;
+    width: 750rpx;
+    height: auto;
+    min-height: 700rpx;
+    padding: 0 25rpx;
+    margin-bottom: 120rpx;
+  }
+  .orderInfoCon{
+    width: 700rpx;
+    height: 85rpx;
+    border-bottom: 1rpx solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30rpx;
+  }
+  .orderInfoCon .title{
+    width: 155rpx;
+    text-align: left;
+    padding: 0 15rpx;
+    color: #333;
+  }
+  .orderInfoCon .infoCon{
+    padding-left: 30rpx;
+    width: 425rpx;
+    color: #999;
+  }
+  .orderInfoCon .con{
+    width: 173rpx;
+    text-align: right;
+    color: #333;
+  }
+  .orderInfoCon .conColor{
+    color: #ff5536 !important;
+  }
+  .orderInfo input{
+    width: 100%;
+  }
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+    <view class="list">
+      <view class="listCon">
+        <view class="sel">
+          <checkbox-group data-wpychangeselect-a="">
+            <checkbox value="1" checked=""></checkbox>
+          </checkbox-group>
+        </view>
+        <view class="sample">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view class="title">2048香辣蟹</view>
+          <view class="salesVolume">已售300份</view>
+          <view class="price">
+            <span>￥168</span>元/份
+          </view>
+        </view>
+        <view class="listConOperat">
+          <view class="del">
+            <image src="/img/delete.png" />
+          </view>
+          <view class="conOperat">
+            <view class="numControl">-</view>
+            <view class="num">11</view>
+            <view class="numControl">+</view>
+          </view>
+        </view>
+      </view>
+      <view class="listCon">
+        <view class="sel">
+          <checkbox-group data-wpychangeselect-a="">
+            <checkbox value="1" checked=""></checkbox>
+          </checkbox-group>
+        </view>
+        <view class="sample">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view class="title">2048香辣蟹</view>
+          <view class="salesVolume">已售300份</view>
+          <view class="price">
+            <span>￥168</span>元/份
+          </view>
+        </view>
+        <view class="listConOperat">
+          <view class="del">
+            <image src="/img/delete.png" />
+          </view>
+          <view class="conOperat">
+            <view class="numControl">-</view>
+            <view class="num">11</view>
+            <view class="numControl">+</view>
+          </view>
+        </view>
+      </view>
+      <view class="listCon">
+        <view class="sel">
+          <checkbox-group data-wpychangeselect-a="">
+            <checkbox value="1" checked=""></checkbox>
+          </checkbox-group>
+        </view>
+        <view class="sample">
+          <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        </view>
+        <view class="info">
+          <view class="title">2048香辣蟹</view>
+          <view class="salesVolume">已售300份</view>
+          <view class="price">
+            <span>￥168</span>元/份
+          </view>
+        </view>
+        <view class="listConOperat">
+          <view class="del">
+            <image src="/img/delete.png" />
+          </view>
+          <view class="conOperat">
+            <view class="numControl">-</view>
+            <view class="num">11</view>
+            <view class="numControl">+</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="orderInfo">
+      <view class="orderInfoCon">
+        <view class="title">备注</view>
+        <view class="infoCon">
+          <input type="text" placeholder="填写默认信息" />
+        </view>
+        <view class="con"></view>
+      </view>
+      <view class="orderInfoCon">
+        <view class="title">当前桌号</view>
+        <view class="infoCon"></view>
+        <view class="con">A-08</view>
+      </view>
+      <view class="orderInfoCon">
+        <view class="title">共计</view>
+        <view class="infoCon"></view>
+        <view class="con conColor">￥332</view>
+      </view>
+      <view class="orderInfoCon">
+        <view class="title">应付</view>
+        <view class="infoCon">满减优惠46元</view>
+        <view class="con conColor">￥286</view>
+      </view>
+    </view>
+    <view class="operat">
+      <view class="foot">继续点餐</view>
+      <view class="pay">立即支付</view>
+    </view>
+  </scroll-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Shoppingcart extends wepy.page {
+  config = {
+    navigationBarTitleText: '购物车'
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+
+  }
+
+  methods = {
+
+  }
+
+
+  onLoad(e) {
+    // 获取用户信息
+    this.onGotUserInfo()
+    
+  }
+
+}
+</script>
