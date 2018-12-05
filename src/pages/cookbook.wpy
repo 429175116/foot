@@ -261,6 +261,13 @@
     color:#fff;
     line-height:100rpx;
   }
+  .originalPrice{
+    color:#E64340;
+    text-decoration:line-through;
+  }
+  .currentPrice{
+    color:#E64340;
+  }
   checkbox .wx-checkbox-input{
    border-radius: 50%;/* 圆角 */
    width: 40rpx; /* 背景的宽 */
@@ -286,7 +293,7 @@
 <template>
   <view>
     <view class="containertop">
-      <input type="text" class="containertopSearch" placeholder="搜索商品名称">
+      <input type="text" class="containertopSearch" bindinput="getPawData" placeholder="搜索商品名称">
     </view>
     <view class="containerleft">
       <repeat for="{{ menuClass }}" item="item">
@@ -308,8 +315,8 @@
               <span class="discount_price">元/份</span>
             </view>
           </view>
-          <view class="increase" data-wpyincreaseshop-a="">
-            <icon class="iconfont" @tap="setCart">+</icon>
+          <view class="increase" data-id="{{ item.id }}" @tap="setCart">
+            <icon class="iconfont">+</icon>
           </view>
         </view>
       </repeat>
@@ -317,7 +324,7 @@
     </view>
     <view>
       <view class="cart">
-        <text class="bardge">2</text>
+        <text class="bardge" wx:if="{{ cartData.length != 0 }}">{{ cartData.length }}</text>
         <icon class="iconfont icon-cart products" @tap="cartClick">车</icon>
       </view>
       <view class="main-wrapper" wx:if="{{showSelFont}}">
@@ -328,48 +335,52 @@
                 <checkbox value="true" checked=""></checkbox>选择全部
               </checkbox-group>
             </view>
-            <view class="remove-all-wrapper">
+            <view class="remove-all-wrapper" @tap="delCartDataAll">
               <icon class="iconfont">-</icon>
               清空
             </view>
           </view>
           <view class="products-wrapper">
-            <view class="product-item">
-              <view>
-                <checkbox-group data-wpychangeselect-a="">
-                  <checkbox value="1" checked=""></checkbox>
-                </checkbox-group>
-              </view>
-              <view class="product-pic">
-                <image src="" />
-              </view>
-              <view class="product-info">
-                <text>海贼王路飞</text>
-                <text>￥ 25.00</text>
-              </view>
-              <view class="product-cart-control">
-                <view class="controller-wrapper">
-                  <view class="decrease" data-com-index="0">
-                    <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
-                  </view>
-                  <view class="count-wrapper" data-com-index="0" index="0">
-                    <picker data-com-index="0" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
-                      <view class="count">2</view>
-                    </picker>
-                  </view>
-                  <view class="increase" data-com-index="0">
-                    <icon class="iconfont" style="color: #E64340">+</icon>
+            <repeat for="{{ cartData }}" item="item">
+              <view class="product-item" data-id="{{ item.id }}">
+                <view>
+                  <checkbox-group data-wpychangeselect-a="">
+                    <checkbox value="1" checked=""></checkbox>
+                  </checkbox-group>
+                </view>
+                <view class="product-pic">
+                  <image src="{{ item.img }}" />
+                </view>
+                <view class="product-info">
+                  <text>{{ item.name }}</text>
+                  <text class="originalPrice">￥{{ item.price }}</text>
+                  <text class="currentPrice">￥{{ item.discount }}</text>
+                </view>
+                <view class="product-cart-control">
+                  <view class="controller-wrapper">
+                    <view class="decrease" data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numDown">
+                      <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
+                    </view>
+                    <view class="count-wrapper" data-num="{{ item.num }}" index="0">
+                      <picker  data-num="{{ item.num }}" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
+                        <view class="count">{{ item.num }}</view>
+                      </picker>
+                    </view>
+                    <view class="increase"  data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numUp">
+                      <icon class="iconfont" style="color: #E64340">+</icon>
+                    </view>
                   </view>
                 </view>
               </view>
-            </view>
+            </repeat>
+            
           </view>
           <view class="payment-wrapper">
             <view class="price-wrapper">
-              <text class="price">￥ 50元</text>
+              <text class="price">￥{{allPrice}}元</text>
               <text class="delivery-price">配送™滴香油</text>
             </view>
-            <view class="goto-payment-wrapper">去结算</view>
+            <view class="goto-payment-wrapper" @tap="settlement">去结算</view>
           </view>
         </view>
       </view>
@@ -399,8 +410,10 @@
       menu: [],
       menuClass: [],
       menuClassId: 0,
+      cartData: [],
       active: 'notactive',
-      showSelFont: false
+      showSelFont: false,
+      allPrice: 0
     }
 
     methods = {
@@ -428,7 +441,11 @@
     plusCount() {
       this.showOrHide = 'all-show'
     }
-
+    // 搜索事件输入触发
+    getPawData(e) {
+      this.setpawData = e.detail.value
+      console.log(this.setpawData)
+    }
     changeMenuClass(e) {
       this.menuClassId = e.currentTarget.dataset.id
       // 获取菜单分类下的列表
@@ -442,11 +459,13 @@
           product_category_id: this.menuClassId
         },
         success: data => {
-          console.log(data)
           if (data.data.success) {
             // 获取用户信息,及openID  并存入全局
             this.menu = data.data.data.products.data
-            console.log(this.menu)
+            for (let i = 0; i < this.menu.length; i++) {
+              // 加入选择个数，默认为0，用于和点餐时存储数量
+              this.menu[i]['num'] = 1
+            }
             this.$apply()
           } else {
             wx.showModal({
@@ -456,6 +475,78 @@
           }
         }
       })
+    }
+    // 菜品加入购物车
+    setCart(e) {
+      let menuId = e.currentTarget.dataset.id
+      // 根据菜品ID给购物车加入选中的菜品数据
+      // this.cartData // 购物车数据
+      // this.menu // 菜单数据
+      let i = 0
+      let x = 0
+      let menu = this.menu
+      // 多次点击一个则数量增加
+      for (x in this.cartData) {
+        if (menuId === this.cartData[x].id) {
+          this.cartData[x].num += 1
+          // 计入总价
+          this.allPrice += parseFloat(this.cartData[x].discount)
+          return
+        }
+      }
+      // 不重复点击则种类增加
+      for (i in menu) {
+        if (menuId === menu[i].id) {
+          this.cartData.push(menu[i])
+          // 计入总价
+          this.allPrice += parseFloat(menu[i].discount)
+          return
+        }
+      }
+    }
+    // 数量减------
+    numDown(e) {
+      let menuId = e.currentTarget.dataset.id
+      let num  = e.currentTarget.dataset.num
+      
+      let i = 0
+      for (i in this.cartData) {
+        if (menuId === this.cartData[i].id) {
+          this.cartData[i].num -= 1
+          // 计入总价
+          this.allPrice -= parseFloat(this.cartData[i].discount)
+          if (num === 1) {
+            this.cartData.splice(i, 1)
+          }
+        }
+      }
+    }
+    // 数量加++++++
+    numUp(e) {
+      let menuId = e.currentTarget.dataset.id
+      let num  = e.currentTarget.dataset.num
+      let i = 0
+      for (i in this.cartData) {
+        if (menuId === this.cartData[i].id) {
+          this.cartData[i].num += 1
+          // 计入总价
+          this.allPrice += parseFloat(this.cartData[i].discount)
+          return
+        }
+      }
+    }
+    // 清空
+    delCartDataAll() {
+      // 清空购物车数据
+      this.cartData = []
+      // 计入总价
+      this.allPrice = 0
+    }
+    // 结算
+    settlement() {
+      // 控制结算显示隐藏
+      this.cartClick()
+      this.$navigate('/pages/shoppingCart')
     }
     // productCategotyList() {
     //   let params = {
@@ -501,12 +592,10 @@
           bistro_id: this.$parent.globalData.bistro_id
         },
         success: data => {
-          console.log(data)
           if (data.data.success) {
             // 获取用户信息,及openID  并存入全局
             this.menuClass = data.data.data.product_categories.data
             this.menuClassId = this.menuClass[0].id
-            console.log(this.menuClass)
             // 获取菜单分类下的列表
             this.getMenu()
             this.$apply()
