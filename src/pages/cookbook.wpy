@@ -24,7 +24,7 @@
     float: left;
     width: 25%;
   }
-  .catgegory {
+  .menuClass {
     width: 100%;
     height: 100rpx;
     line-height: 100rpx;
@@ -50,7 +50,8 @@
     background:#fff;
     width:100%;
     border-bottom:1px solid #E5E5E5;
-    height:150rpx;
+    min-height:150rpx;
+    height: auto;
     display:flex;
     padding:25rpx 0;
   }
@@ -73,6 +74,9 @@
   }
   .discount{
     color:#E64340;
+  }
+  .discount p{
+    text-decoration:line-through;
   }
   .discount_price{
     color:#B2B2B2;
@@ -257,6 +261,27 @@
     color:#fff;
     line-height:100rpx;
   }
+  checkbox .wx-checkbox-input{
+   border-radius: 50%;/* 圆角 */
+   width: 40rpx; /* 背景的宽 */
+   height: 40rpx; /* 背景的高 */
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked{
+    border: none;
+    background: #fc6800;
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
+    border-radius: 50%;/* 圆角 */
+    width: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
+    height: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
+    line-height: 40rpx;
+    text-align: center;
+    font-size:30rpx; /* 对勾大小 30rpx */
+    color:#fff; /* 对勾颜色 白色 */
+    background: transparent;
+    transform:translate(-50%, -50%) scale(1);
+    -webkit-transform:translate(-50%, -50%) scale(1);
+  }
 </style>
 <template>
   <view>
@@ -264,69 +289,38 @@
       <input type="text" class="containertopSearch" placeholder="搜索商品名称">
     </view>
     <view class="containerleft">
-      <repeat for="{{ category }}" item="item">
-        <!-- <li wx:if='{{ item.hidden == 0 }}' class="catgegory notactive" @tap="changeCategory" data-id='{{ item.id }}'>{{ item.name }}</li>
-        <li wx:else class="catgegory active" @tap="changeCategory" data-id='{{ item.id }}'>{{ item.name }}</li> -->
+      <repeat for="{{ menuClass }}" item="item">
+        <li wx:if='{{ item.id == menuClassId }}' class="menuClass active" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
+        <li wx:else class="menuClass notactive" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
       </repeat>
-      <li class="catgegory active" data-id="1">菜单1</li>
-      <li class="catgegory notactive" data-id="1">菜单1</li>
-      <li class="catgegory notactive" data-id="1">菜单1</li>
-      <li class="catgegory notactive" data-id="1">菜单1</li>
-      <li class="catgegory notactive" data-id="1">菜单1</li>
     </view>
     <view class="container1">
-      <view class="organic_rice" data-wpygotoproduct-a="1">
-        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        <view class="organic_rice_text">
-          <view class="rice">海贼王路飞</view>
-          <view class="sale">莫名的牛逼</view>
-          <view class="sale">销量0 | 在售</view>
-          <view class="discount">
-            ￥20.00
-            <span class="discount_price">元/份</span>
+      <repeat for="{{ menu }}" item="item">
+        <view class="organic_rice" data-id="{{ item.id }}">
+          <image class="organic_rice_pic" src="{{ item.img }}" />
+          <view class="organic_rice_text">
+            <view class="rice">{{ item.name }}</view>
+            <view class="sale">{{ item.description }}</view>
+            <view class="sale">销量{{ item.sale_count }} | {{ item.status }}</view>
+            <view class="discount">
+              ￥<p>{{ item.price }}</p>
+              {{ item.discount }}
+              <span class="discount_price">元/份</span>
+            </view>
+          </view>
+          <view class="increase" data-wpyincreaseshop-a="">
+            <icon class="iconfont" @tap="setCart">+</icon>
           </view>
         </view>
-        <view class="increase" data-wpyincreaseshop-a="">
-          <icon class="iconfont">+</icon>
-        </view>
-      </view>
-      <view class="organic_rice" data-wpygotoproduct-a="1">
-        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        <view class="organic_rice_text">
-          <view class="rice">海贼王路飞</view>
-          <view class="sale">莫名的牛逼</view>
-          <view class="sale">销量0 | 在售</view>
-          <view class="discount">
-            ￥20.00
-            <span class="discount_price">元/份</span>
-          </view>
-        </view>
-        <view class="increase" data-wpyincreaseshop-a="">
-          <icon class="iconfont">+</icon>
-        </view>
-      </view>
-      <view class="organic_rice" data-wpygotoproduct-a="1">
-        <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-        <view class="organic_rice_text">
-          <view class="rice">海贼王路飞</view>
-          <view class="sale">莫名的牛逼</view>
-          <view class="sale">销量0 | 在售</view>
-          <view class="discount">
-            ￥20.00
-            <span class="discount_price">元/份</span>
-          </view>
-        </view>
-        <view class="increase" data-wpyincreaseshop-a="">
-          <icon class="iconfont">+</icon>
-        </view>
-      </view>
+      </repeat>
+      <view wx:if="{{menu.length == 0}}" class="dataNullShow">暂无菜品</view>
     </view>
     <view>
       <view class="cart">
         <text class="bardge">2</text>
-        <icon class="iconfont icon-cart products">车</icon>
+        <icon class="iconfont icon-cart products" @tap="cartClick">车</icon>
       </view>
-      <view class="main-wrapper">
+      <view class="main-wrapper" wx:if="{{showSelFont}}">
         <view class="shop-cart-wrapper">
           <view class="operation-wrapper">
             <view class="select-all-wrapper">
@@ -402,10 +396,11 @@
         num: 0,
         product: []
       },
-      bannerList: [],
-      category: [],
-      categoryid: 0,
-      active: 'notactive'
+      menu: [],
+      menuClass: [],
+      menuClassId: 0,
+      active: 'notactive',
+      showSelFont: false
     }
 
     methods = {
@@ -419,7 +414,13 @@
 
       }
     }
-
+    cartClick() {
+      if (this.showSelFont) {
+        this.showSelFont = false
+      } else {
+        this.showSelFont = true
+      }
+    }
     getStorage() {
       this.shoppingCar = wepy.getStorageSync('shoppingCar')
     }
@@ -428,23 +429,34 @@
       this.showOrHide = 'all-show'
     }
 
-    changeCategory(e) {
-      this.categoryid = e.currentTarget.dataset.id
-      var categoryid = e.currentTarget.dataset.id
-      var category = this.category
-      var i = 0
-      for (i in category) {
-        if (category[i].id === Number(categoryid)) {
-          category[i].hidden = 1
-        } else {
-          category[i].hidden = 0
-        }
-      }
-      this.category = category
-      this.$apply()
-      this.$invoke('ShopList', 'changeCategoryId')
+    changeMenuClass(e) {
+      this.menuClassId = e.currentTarget.dataset.id
+      // 获取菜单分类下的列表
+      this.getMenu()
     }
-
+    getMenu() {
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/api/listWithCategoryId`,
+        method: 'GET',
+        data: {
+          product_category_id: this.menuClassId
+        },
+        success: data => {
+          console.log(data)
+          if (data.data.success) {
+            // 获取用户信息,及openID  并存入全局
+            this.menu = data.data.data.products.data
+            console.log(this.menu)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     // productCategotyList() {
     //   let params = {
     //     bistro_id: 1
@@ -475,22 +487,28 @@
     // }
 
     onLoad(e) {
+      // this.bistro_id = this.$parent.globalData.bistro_id
       // this.productCategotyList()
+      // 获取菜单分类
+      this.getMenuClass()
+      this.$apply()
+    }
+    getMenuClass() {
       wx.request({
-        url: `${this.$parent.globalData.requestUrl}/api/productDetail/1`,
+        url: `${this.$parent.globalData.requestUrl}/api/productCategotyList`,
         method: 'GET',
         data: {
-          code: res.code,
-          nick_name: this.userInfo.nickName,
-          profile: this.userInfo.avatarUrl
+          bistro_id: this.$parent.globalData.bistro_id
         },
         success: data => {
+          console.log(data)
           if (data.data.success) {
             // 获取用户信息,及openID  并存入全局
-            this.userInfo = data.data.data.user
-            this.openId = this.userInfo.open_id
-            this.$parent.globalData.userInfo = this.userInfo
-            this.$parent.globalData.openId = this.openId
+            this.menuClass = data.data.data.product_categories.data
+            this.menuClassId = this.menuClass[0].id
+            console.log(this.menuClass)
+            // 获取菜单分类下的列表
+            this.getMenu()
             this.$apply()
           } else {
             wx.showModal({
@@ -500,7 +518,6 @@
           }
         }
       })
-      this.$apply()
     }
   }
 </script>
