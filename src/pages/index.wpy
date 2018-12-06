@@ -290,7 +290,7 @@ export default class index extends wepy.page {
   }
   newroom() {
     console.log('创建房间')
-    this.$navigate("/pages/cookbook")
+    this.$navigate("/pages/shoppingCart")
   }
 
   goorder() {

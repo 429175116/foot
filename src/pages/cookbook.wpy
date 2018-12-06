@@ -380,7 +380,7 @@
               <text class="price">￥{{allPrice}}元</text>
               <text class="delivery-price">配送™滴香油</text>
             </view>
-            <view class="goto-payment-wrapper" @tap="settlement">去结算</view>
+            <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
           </view>
         </view>
       </view>
@@ -542,11 +542,45 @@
       // 计入总价
       this.allPrice = 0
     }
-    // 结算
+    // 保存点菜数据到服务器，用于显示在订单页
     settlement() {
       // 控制结算显示隐藏
       this.cartClick()
-      this.$navigate('/pages/shoppingCart')
+      // this.cartData 已经选中的菜品
+      let upCartData = []
+      let cartData = this.cartData
+      // 根据已经选中的菜品数据生成需要提交订单从菜品数据
+      let i = 0
+      for (i in cartData) {
+        let cartJson = {"id": cartData[i].id, "num": cartData[i].num}
+        upCartData.push(cartJson)
+      }
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/api/addShoppingCart`,
+        method: 'POST',
+        header: {
+          AuthrizeOpenId: this.$parent.globalData.openId
+        },
+        data: upCartData,
+        success: data => {
+          // if (data.data.success) {
+          //   // 获取用户信息,及openID  并存入全局
+          //   this.menu = data.data.data.products.data
+          //   for (let i = 0; i < this.menu.length; i++) {
+          //     // 加入选择个数，默认为0，用于和点餐时存储数量
+          //     this.menu[i]['num'] = 1
+          //   }
+          //   this.$apply()
+          // } else {
+          //   wx.showModal({
+          //     title: '',
+          //     content: data.data.errmsg
+          //   })
+          // }
+        }
+      })
+      // 如果接口返回成功，则进入菜单显示页
+      // this.$navigate('/pages/shoppingCart')
     }
     // productCategotyList() {
     //   let params = {
@@ -593,7 +627,6 @@
         },
         success: data => {
           if (data.data.success) {
-            // 获取用户信息,及openID  并存入全局
             this.menuClass = data.data.data.product_categories.data
             this.menuClassId = this.menuClass[0].id
             // 获取菜单分类下的列表
