@@ -311,7 +311,7 @@
         <button type="primary" open-type="share" data-name="pageShare" id="share">邀请好友</button>
       <!-- </view> -->
       <view class="foot" @tap="foot">点餐</view>
-      <view class="pay" @tap="pay">结账</view>
+      <view class="pay" @tap="upDataMoney">结账</view>
     </view>
     <view class="operat operat-false" wx:if="{{!dinner}}">
       <view class="foot" @tap="foot">点餐</view>
@@ -342,9 +342,9 @@ export default class Shoppingcart extends wepy.page {
     this.$navigate('/pages/cookbook')
   }
   // 进入支付页
-  pay() {
-    this.$navigate('/pages/pay')
-  }
+  // pay() {
+  //   this.$navigate('/pages/pay')
+  // }
   onLoad(e) {
     this.userInfo = this.$parent.globalData.userInfo
     console.log(this.userInfo)
@@ -440,6 +440,64 @@ export default class Shoppingcart extends wepy.page {
       imageUrl: this.userInfo.profile,
       path: url
     }
-  };
+  }
+  // 买单
+  async upDataMoney(e) {
+    var upDataM = e.currentTarget.dataset.money
+    upDataM = parseInt(upDataM)
+    // await wepy.login().then(res => {
+    //   this.code = res.code
+    // })
+    // loading图片显示
+    this.loadingImgShow = true
+    this.$apply()
+    await wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/beanPay`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      data: {
+        pay_amount: upDataM
+      },
+      success: data => {
+        console.log(data)
+        if (data.data.success) {
+          wx.requestPayment({
+            'timeStamp': data.data.data.config.timestamp,
+            'nonceStr': data.data.data.config.nonceStr,
+            'package': data.data.data.config.package,
+            'signType': data.data.data.config.signType,
+            'paySign': data.data.data.config.paySign,
+            'success': data => {
+              // loading图片隐藏
+              this.loadingImgShow = false
+              this.$apply()
+              // wepy.showModal({
+              //   title: '',
+              //   content: '买单成功',
+              //   showCancel: false
+              // })
+              this.$navigate('/pages/pay')
+            },
+            'fail': data => {
+              wepy.showModal({
+                title: '',
+                content: '买单失败',
+                showCancel: false
+              })
+            }
+          })
+        } else {
+          this.loadingImgShow = false
+          this.$apply()
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
 }
 </script>
