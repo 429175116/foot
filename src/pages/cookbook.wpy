@@ -508,7 +508,6 @@
     numDown(e) {
       let menuId = e.currentTarget.dataset.id
       let num  = e.currentTarget.dataset.num
-      
       let i = 0
       for (i in this.cartData) {
         if (menuId === this.cartData[i].id) {
@@ -524,7 +523,7 @@
     // 数量加++++++
     numUp(e) {
       let menuId = e.currentTarget.dataset.id
-      let num  = e.currentTarget.dataset.num
+      let num = e.currentTarget.dataset.num
       let i = 0
       for (i in this.cartData) {
         if (menuId === this.cartData[i].id) {
@@ -552,7 +551,7 @@
       // 根据已经选中的菜品数据生成需要提交订单从菜品数据
       let i = 0
       for (i in cartData) {
-        let cartJson = {"id": cartData[i].id, "num": cartData[i].num}
+        let cartJson = {'id': cartData[i].id, 'num': cartData[i].num}
         upCartData.push(cartJson)
       }
       wx.request({

@@ -329,7 +329,7 @@ export default class Shoppingcart extends wepy.page {
   }
   mixins = []
   data = {
-    cartData:[], // 已经选取的菜
+    cartData: [], // 已经选取的菜
     dinner: true, // 用户身份(请客true/被请false)
     userInfo: null
   }
@@ -339,11 +339,11 @@ export default class Shoppingcart extends wepy.page {
   }
   // 进入点餐页
   foot() {
-    this.$navigate("/pages/cookbook")
+    this.$navigate('/pages/cookbook')
   }
   // 进入支付页
   pay() {
-    this.$navigate("/pages/pay")
+    this.$navigate('/pages/pay')
   }
   onLoad(e) {
     this.userInfo = this.$parent.globalData.userInfo
@@ -379,9 +379,6 @@ export default class Shoppingcart extends wepy.page {
       }
     })
   }
-
-
-
   // 选择购物车商品,获取商品在数组中的下标
   selCommodity(e) {
     this.cartIndex = e.detail.value

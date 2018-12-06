@@ -256,7 +256,7 @@ export default class index extends wepy.page {
     nickName: '',
     code: '',
     newRoom: true,
-    setpassword:'',
+    setpassword: '',
     newRoomDom: false
   }
 
@@ -290,7 +290,7 @@ export default class index extends wepy.page {
     // 请客--true  被请--false
     this.$parent.globalData.dinner = true
     this.newRoomDom = false
-    this.$navigate("/pages/shoppingCart")
+    this.$navigate('/pages/shoppingCart')
     return
     wx.request({
       url: `${this.$parent.globalData.requestUrl}/api/createDinner`,
@@ -303,7 +303,7 @@ export default class index extends wepy.page {
       },
       success: data => {
         if (data.data.success) {
-          this.$navigate("/pages/shoppingCart")
+          this.$navigate('/pages/shoppingCart')
           // // 获取用户信息,及openID  并存入全局
           // this.userInfo = data.data.user
           // this.openId = this.userInfo.open_id
@@ -402,7 +402,7 @@ export default class index extends wepy.page {
     this.$parent.globalData.dinner = false
     console.log('进入房间')
     // 进入房间列表页
-    this.$navigate("/pages/roomList")
+    this.$navigate('/pages/roomList')
   }
 }
 </script>
