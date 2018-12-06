@@ -1,299 +1,181 @@
 <style lang="less">
   page{
-    background-color: #e9e9e9;
+    background-color: #f9f9f9;
+    height: 100%;
   }
   scroll-view{
+    // height: 100%;
     height: auto;
   }
-  .operat{
-    width: 750rpx;
-    height: 100rpx;
-    position: fixed;
-    bottom: 0rpx;
-    box-shadow: 0px 0px 5px #ccc;
+  .header{
+    width: 700rpx;
+    height: 300rpx;
+    background: linear-gradient(to top, #ff4842, #ffad4b);
+    margin: auto;
+    font-size: 25rpx;
+    color: #fff;
+  }
+  .header view{
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .operat view{
-    width: 375rpx;
+  .header image{
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 80rpx;
+    margin: auto;
+    margin-top: 40rpx;
+  }
+  .payStatus{
     height: 100rpx;
-    text-align: center;
     line-height: 100rpx;
   }
-  .foot{
-    color: #ff5536;
-    background-color: #fff;
-  }
-  .pay{
-    color: #fff;
-    background-color: #ff5536;;
-  }
-  .list{
-    background-color: #fff;
-    width: 750rpx;
+  .order, .info{
+    width: 700rpx;
     height: auto;
-    
+    background-color: #fff;
+    margin: auto;
+    margin-top: 20rpx;
   }
-  .listCon{
-    width: 750rpx;
-    height: 187rpx;
-    border: 1rpx solid #f0f0f0;
+  .order .title{
+    text-align: center;
+    width: 100%;
+    height: 62rpx;
+    line-height: 62rpx;
+    color: #303030;
+    font-size: 30rpx;
+    font-weight: 600;
+  }
+  .order .sontitle{
+    text-align: left;
+    width: 100%;
+    height: 57rpx;
+    line-height: 57rpx;
+    color: #4a4a4a;
+    font-size: 30rpx;
+    padding: 0 20rpx;
+  }
+  .order .orderList{
+    padding: 0 20rpx;
+    height: auto;
+    padding-bottom: 60rpx;
+    font-size: 25rpx;
+  }
+  .order .list{
     display: flex;
     align-items: center;
     justify-content: center;
-  } 
-  .sel{
-    width: 80rpx;
+    height: 57rpx;
+    line-height: 57rpx;
+    border-bottom: 1rpx dashed #e6e6e6;
+  }
+  .order .name, .order .num{
+    text-align: left;
+  }
+  .order .name{
+    width: 317rpx;
+    color: #666;
+  }
+  .order .num{
+    color: #aaa;
+    width: 150rpx;
+  }
+  .order .price{
+    text-align: right;
+    width: 200rpx;
+    color: #666;
+  }
+  .info .list{
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 70rpx;
+    line-height: 70rpx;
+    border-bottom: 1rpx solid #e6e6e6;
+    color: #4a4a4a;
+    padding: 0 20rpx;
   }
-  .sample{
-    width: 140rpx;
+  .info .list view{
+    width: 50%;
   }
-  .sample image{
-    width: 140rpx;
-    height: 140rpx;
+  .info .list .name{
+    text-align: left;
+  }
+  .info .list .con{
+    text-align: right;
+  }
+  .list span{
+    color: #aaa;
+  }
+  .con .price{
+    color: #ff7751;
+  }
+  .info .list:last-child {
+    border-width: 0rpx;
   }
   .info{
-    width: 350rpx;
-    // height: 100%;
-    padding: 27rpx;
-    color: #999;
-    font-size: 22rpx;
+    margin-bottom: 208rpx;
   }
-  .info .title{
-    color: #333;
-    height: 30rpx;
-    line-height: 30rpx;
-  }
-  .info .salesVolume{
-    height: 55rpx;
-    line-height: 55rpx;
-  }
-  .info .price{
-    height: 60rpx;
-    line-height: 75rpx;
-  }
-  .info span{
-    color: #ff5536;
-  }
-  .listConOperat{
-    width: 185rpx;
-    height: 137rpx;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .listConOperat .del{
-    position: absolute;
-    right: 20rpx;
-    top: 0rpx;
-    width: 35rpx;
-    height: 35rpx;
-  }
-  .listConOperat .del image{
-    width: 35rpx;
-    height: 35rpx;
-  }
-  .listConOperat .numControl{
-    width: 40rpx;
-    height: 40rpx;
-    line-height: 40rpx;
-    border: 1rpx solid #999;
-    border-radius: 10rpx;
-    text-align: center;
-    color: #999;
-  }
-  .listConOperat .num{
-    width: auto;
-    min-width: 55rpx;
-    max-width: 100rpx;
-    line-height: 40rpx;
-    text-align: center;
-  }
-  .listConOperat .conOperat{
-    position: absolute;
-    height: 40rpx;
-    bottom: 0rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .orderInfo{
-    background-color: #fff;
-    margin-top: 10rpx;
-    width: 750rpx;
-    height: auto;
-    min-height: 700rpx;
-    padding: 0 25rpx;
-    margin-bottom: 120rpx;
-  }
-  .orderInfoCon{
+  .returnHome{
+    position: fixed;
+    left: 25rpx;
+    bottom: 60rpx;
     width: 700rpx;
-    height: 85rpx;
-    border-bottom: 1rpx solid #999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30rpx;
-  }
-  .orderInfoCon .title{
-    width: 155rpx;
-    text-align: left;
-    padding: 0 15rpx;
-    color: #333;
-  }
-  .orderInfoCon .infoCon{
-    padding-left: 30rpx;
-    width: 425rpx;
-    color: #999;
-  }
-  .orderInfoCon .con{
-    width: 173rpx;
-    text-align: right;
-    color: #333;
-  }
-  .orderInfoCon .conColor{
-    color: #ff5536 !important;
-  }
-  .orderInfo input{
-    width: 100%;
-  }
-  checkbox .wx-checkbox-input{
-   border-radius: 50%;/* 圆角 */
-   width: 40rpx; /* 背景的宽 */
-   height: 40rpx; /* 背景的高 */
-  }
-  checkbox .wx-checkbox-input.wx-checkbox-input-checked{
-    border: none;
-    background: #fc6800;
-  }
-  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
-    border-radius: 50%;/* 圆角 */
-    width: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
-    height: 40rpx;/* 选中后对勾大小，不要超过背景的尺寸 */
-    line-height: 40rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    border-radius: 20rpx;
+    background-color: #ff4141;
     text-align: center;
-    font-size:30rpx; /* 对勾大小 30rpx */
-    color:#fff; /* 对勾颜色 白色 */
-    background: transparent;
-    transform:translate(-50%, -50%) scale(1);
-    -webkit-transform:translate(-50%, -50%) scale(1);
+    color: #fff;
+    margin: auto;
   }
-
 </style>
 <template>
   <scroll-view scroll-y="hidden">
-    <view class="list">
-      <checkbox-group bindchange="selCommodity" data-index="{{index}}" data-checks="{{item.checks}}">
-        <view class="listCon">
-          <view class="sel">
-            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
-          </view>
-          <view class="sample">
-            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-          </view>
-          <view class="info">
-            <view class="title">2048香辣蟹</view>
-            <view class="salesVolume">已售300份</view>
-            <view class="price">
-              <span>￥168</span>元/份
-            </view>
-          </view>
-          <view class="listConOperat">
-            <view class="del">
-              <image src="/img/delete.png" />
-            </view>
-            <view class="conOperat">
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
-              <view class="num">11</view>
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
-            </view>
-          </view>
-        </view>
-        <view class="listCon">
-          <view class="sel">
-            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
-          </view>
-          <view class="sample">
-            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-          </view>
-          <view class="info">
-            <view class="title">2048香辣蟹</view>
-            <view class="salesVolume">已售300份</view>
-            <view class="price">
-              <span>￥168</span>元/份
-            </view>
-          </view>
-          <view class="listConOperat">
-            <view class="del">
-              <image src="/img/delete.png" />
-            </view>
-            <view class="conOperat">
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
-              <view class="num">11</view>
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
-            </view>
-          </view>
-        </view>
-        <view class="listCon">
-          <view class="sel">
-            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
-          </view>
-          <view class="sample">
-            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-          </view>
-          <view class="info">
-            <view class="title">2048香辣蟹</view>
-            <view class="salesVolume">已售300份</view>
-            <view class="price">
-              <span>￥168</span>元/份
-            </view>
-          </view>
-          <view class="listConOperat">
-            <view class="del">
-              <image src="/img/delete.png" />
-            </view>
-            <view class="conOperat">
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
-              <view class="num">11</view>
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
-            </view>
-          </view>
-        </view>
-      </checkbox-group>
+    <view class="header">
+      <view>
+        <image src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+      </view>
+      <view class="payStatus">支付成功</view>
     </view>
-    <view class="orderInfo">
-      <view class="orderInfoCon">
-        <view class="title">备注</view>
-        <view class="infoCon">
-          <input type="text" placeholder="填写默认信息" />
+    <view class="order">
+      <view class="title">香辣虾</view>
+      <view class="sontitle">香辣虾</view>
+      <view class="orderList">
+        <view class="list">
+          <view class="name">名字</view>
+          <view class="num">×100</view>
+          <view class="price">￥1000</view>
         </view>
-        <view class="con"></view>
-      </view>
-      <view class="orderInfoCon">
-        <view class="title">当前桌号</view>
-        <view class="infoCon"></view>
-        <view class="con">A-08</view>
-      </view>
-      <view class="orderInfoCon">
-        <view class="title">共计</view>
-        <view class="infoCon"></view>
-        <view class="con conColor">￥332</view>
-      </view>
-      <view class="orderInfoCon">
-        <view class="title">应付</view>
-        <view class="infoCon">满减优惠46元</view>
-        <view class="con conColor">￥286</view>
       </view>
     </view>
-    <view class="operat">
-      <view class="foot">继续点餐</view>
-      <view class="pay">立即支付</view>
+    <view class="info">
+      <view class="list">
+        <view class="name">桌号</view>
+        <view class="con">￥1000</view>
+      </view>
+      <view class="list">
+        <view class="name">备注</view>
+        <view class="con">
+          <span>￥1000</span>
+        </view>
+      </view>
+      <view class="list">
+        <view class="name">共计</view>
+        <view class="con">
+          <span class="price">￥1000</span>
+        </view>
+      </view>
+      <view class="list">
+        <view class="name">实付款</view>
+        <view class="con">
+          <span class="price">￥1000</span>
+        </view>
+      </view>
     </view>
+    <view class="returnHome">返回首页</view>
   </scroll-view>
 </template>
 
@@ -301,7 +183,7 @@
 import wepy from 'wepy'
 export default class Pay extends wepy.page {
   config = {
-    navigationBarTitleText: '支付'
+    navigationBarTitleText: '订单结果'
   }
   components = {
   }
@@ -314,55 +196,5 @@ export default class Pay extends wepy.page {
 
   }
   onLoad(e) {}
-  // 选择购物车商品,获取商品在数组中的下标
-  selCommodity(e) {
-    this.cartIndex = e.detail.value
-    this.allPrice = this.getAllPrice()
-  }
-  getAllPrice() {
-    let allPrice = 0
-    let index = this.cartIndex
-    let allListData = this.cartList
-    for (var i in index) {
-      allPrice += allListData[index[i]].num * allListData[index[i]].good_information.cost_beans
-    }
-    return allPrice
-  }
-  quantityUp(e) {
-    // 剩余商品数量
-    let storage = e.currentTarget.dataset.storage
-    // 商品数量
-    let num = e.currentTarget.dataset.num
-    // 下标
-    let index = e.currentTarget.dataset.index
-    if (num >= storage) {
-      wx.showModal({
-        title: '',
-        content: '剩余商品不足'
-      })
-      return
-    }
-    for (var i in this.cartIndex) {
-      this.cartList[this.cartIndex[i]].checks = true
-    }
-    this.cartList[index].num += 1
-    this.allPrice = this.getAllPrice()
-    this.$apply()
-  }
-  quantityDown(e) {
-    // 商品数量
-    let num = e.currentTarget.dataset.num
-    // 下标
-    let index = e.currentTarget.dataset.index
-    if (num === 1) {
-      return
-    }
-    for (var i in this.cartIndex) {
-      this.cartList[this.cartIndex[i]].checks = true
-    }
-    this.cartList[index].num -= 1
-    this.allPrice = this.getAllPrice()
-    this.$apply()
-  }
 }
 </script>
