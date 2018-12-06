@@ -6,6 +6,7 @@
     height: auto;
   }
   .operat{
+    background-color: #fff;
     width: 750rpx;
     height: 100rpx;
     position: fixed;
@@ -15,12 +16,27 @@
     align-items: center;
     justify-content: center;
   }
-  .operat view{
-    width: 375rpx;
+  .operat-true view{
+    width: 250rpx;
     height: 100rpx;
     text-align: center;
     line-height: 100rpx;
   }
+  .operat-false view{
+    width: 750rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+  }
+  button[type=primary] {
+    width: 250rpx !important;
+    height: 100rpx !important;
+    line-height: 100rpx  !important;
+    border-radius: 0  !important;
+    color:#FFFFFF !important;
+    background-color:#333 !important;
+  }
+
   .foot{
     color: #ff5536;
     background-color: #fff;
@@ -162,6 +178,25 @@
   .orderInfo input{
     width: 100%;
   }
+  .confirmMenu{
+    margin-top: 50rpx;
+    width: 700rpx;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .confirmMenu view{
+    width: 600rpx;
+    height: 90rpx;
+    border-radius: 20rpx;
+    font-size: 40rpx;
+    color: #fff;
+    background-color: #ff5536;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   checkbox .wx-checkbox-input{
    border-radius: 50%;/* 圆角 */
    width: 40rpx; /* 背景的宽 */
@@ -189,6 +224,31 @@
   <scroll-view scroll-y="hidden">
     <view class="list">
       <checkbox-group bindchange="selCommodity" data-index="{{index}}" data-checks="{{item.checks}}">
+        <view class="listCon">
+          <view class="sel">
+            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
+          </view>
+          <view class="sample">
+            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+          </view>
+          <view class="info">
+            <view class="title">2048香辣蟹</view>
+            <view class="salesVolume">已售300份</view>
+            <view class="price">
+              <span>￥168</span>元/份
+            </view>
+          </view>
+          <view class="listConOperat">
+            <view class="del">
+              <image src="/img/delete.png" />
+            </view>
+            <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
+              <view class="num">11</view>
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+            </view>
+          </view>
+        </view>
         <repeat for="{{ cartData }}" item="item">
           <view class="listCon">
             <view class="sel">
@@ -242,10 +302,19 @@
         <view class="infoCon">满减优惠46元</view>
         <view class="con conColor">￥286</view>
       </view>
+      <view class="confirmMenu" wx:if="{{dinner}}">
+        <view>确认菜单</view>
+      </view>
     </view>
-    <view class="operat">
+    <view class="operat operat-true" wx:if="{{dinner}}">
+      <!-- <view class="foot" @tap="share"> -->
+        <button type="primary" open-type="share" data-name="pageShare" id="share">邀请好友</button>
+      <!-- </view> -->
       <view class="foot" @tap="foot">点餐</view>
       <view class="pay" @tap="pay">结账</view>
+    </view>
+    <view class="operat operat-false" wx:if="{{!dinner}}">
+      <view class="foot" @tap="foot">点餐</view>
     </view>
   </scroll-view>
 </template>
@@ -260,7 +329,9 @@ export default class Shoppingcart extends wepy.page {
   }
   mixins = []
   data = {
-    cartData:[]
+    cartData:[], // 已经选取的菜
+    dinner: true, // 用户身份(请客true/被请false)
+    userInfo: null
   }
 
   methods = {
@@ -275,6 +346,10 @@ export default class Shoppingcart extends wepy.page {
     this.$navigate("/pages/pay")
   }
   onLoad(e) {
+    this.userInfo = this.$parent.globalData.userInfo
+    console.log(this.userInfo)
+    // 确认用户身份(请客true/被请false)
+    this.dinner = this.$parent.globalData.dinner
     // 获取购物车菜单列表
     this.getShoppingCart()
   }
@@ -357,5 +432,17 @@ export default class Shoppingcart extends wepy.page {
     this.allPrice = this.getAllPrice()
     this.$apply()
   }
+  // 分享页面
+  onShareAppMessage(res) {
+    let url = `pages/index?userId=${this.userInfo.id}`
+    console.log(url)
+    return {
+      title: `${this.userInfo.nick_name}的邀请`,
+      desc: '',
+      // 图片路径
+      imageUrl: this.userInfo.profile,
+      path: url
+    }
+  };
 }
 </script>

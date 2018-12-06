@@ -217,6 +217,7 @@ export default class Roomlist extends wepy.page {
   setPassword() {
     if (this.setpawData === this.password) {
       console.log('进入房间')
+      this.$navigate("/pages/shoppingCart")
     } else {
       // console.log('密码错误')
       wx.showModal({

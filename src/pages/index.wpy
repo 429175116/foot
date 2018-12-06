@@ -94,6 +94,47 @@
     z-index: -10;
     left:0rpx;
   }
+  .setPow{
+    width: 560rpx;
+    height: 420rpx;
+    border-radius: 20rpx;
+    background-color: #f0f0f0;
+  }
+  .setPow view{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .setPow .title{
+    width: 100%;
+    height: 95rpx;
+    color: #666;
+    border-bottom: 1rpx solid #ccc;
+  }
+  .setData input{
+    width: 460rpx;
+    height: 85rpx;
+    background-color: #fff;
+    border-radius: 10rpx;
+    margin-top: 60rpx;
+    margin-bottom: 45rpx;
+    text-align: center;
+  }
+  .upData view{
+    width: 260rpx;
+    height: 90rpx;
+    color: #fff;
+    border-radius: 10rpx;
+    background: linear-gradient(to right, #fe6804, #ffad00);;
+  }
+  .hideMask{
+    position: absolute;
+    bottom: 160rpx;
+  }
+  .hideMask image{
+    width: 100rpx;
+    height: 100rpx;
+  }
   scroll-view{
     height: auto;
   }
@@ -128,6 +169,21 @@
       <view class="bottomInfo">
         由贝肯伟提供技术支持
         <image src="/img/homeUserBg.png" />
+      </view>
+    </view>
+    <view class="mask" wx:if="{{newRoomDom}}">
+    <!-- <view class="mask"> -->
+      <view class="setPow">
+        <view class="title">请输入六位数字密码</view>
+        <view class="setData">
+          <input type="text" bindinput="getPawData" placeholder="请输入六位密码" />
+        </view>
+        <view class="upData">
+          <view @tap="newRoom">确认</view>
+        </view>
+      </view>
+      <view class="hideMask" @tap="hideMask">
+        <image src="/img/shutDown.png" />
       </view>
     </view>
     <!-- 授权按钮部分 -->
@@ -198,7 +254,10 @@ export default class index extends wepy.page {
     userInfo: null,
     avatarUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLRCZUOeCoWxrjGUrhTVFuvVLKRz08BUM6Y88qy8SxGuBDBKT97rRrYyXyrSNb2Exeuf6YXgVyreQ/132',
     nickName: '',
-    code: ''
+    code: '',
+    newRoom: true,
+    setpassword:'',
+    newRoomDom: false
   }
 
   methods = {
@@ -216,6 +275,49 @@ export default class index extends wepy.page {
     this.$parent.globalData.bistro_id = 1
     // 获取用户信息
     this.onGotUserInfo()
+  }
+  // 获取输入的密码
+  getPawData(e) {
+    this.setpawData = e.detail.value
+  }
+  // 隐藏创建房间浮层
+  hideMask() {
+    this.newRoomDom = false
+  }
+  // 创建房间
+  newRoom() {
+    // 绑定用户身份，确认是否请客
+    // 请客--true  被请--false
+    this.$parent.globalData.dinner = true
+    this.newRoomDom = false
+    this.$navigate("/pages/shoppingCart")
+    return
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/createDinner`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      data: {
+        qr_code: this.setpawData
+      },
+      success: data => {
+        if (data.data.success) {
+          this.$navigate("/pages/shoppingCart")
+          // // 获取用户信息,及openID  并存入全局
+          // this.userInfo = data.data.user
+          // this.openId = this.userInfo.open_id
+          // this.$parent.globalData.userInfo = this.userInfo
+          // this.$parent.globalData.openId = this.openId
+          // this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
   }
   async onGotUserInfo() {
     // 查看是否授权
@@ -290,11 +392,17 @@ export default class index extends wepy.page {
   }
   newroom() {
     console.log('创建房间')
-    this.$navigate("/pages/shoppingCart")
+    // 显示创建房间的浮层
+    this.newRoomDom = true
   }
 
   goorder() {
+    // 绑定用户身份，确认是否请客
+    // 请客--true  被请--false
+    this.$parent.globalData.dinner = false
     console.log('进入房间')
+    // 进入房间列表页
+    this.$navigate("/pages/roomList")
   }
 }
 </script>

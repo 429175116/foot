@@ -43,7 +43,7 @@ export default class extends wepy.app {
       'pages/cookbook', // 菜单(菜品选择)
       'pages/roomList', // 房间列表
       'pages/shoppingCart', // 购物车(订单确认)
-      'pages/pay' // 支付
+      'pages/pay', // 支付
     ],
     window: {
       backgroundTextStyle: 'light',
