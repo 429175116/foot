@@ -269,7 +269,7 @@
       <view class="orderInfoCon">
         <view class="title">备注</view>
         <view class="infoCon">
-          <input type="text" placeholder="填写默认信息" />
+          <input type="text" bindinput="getRemarks" placeholder="填写默认信息" />
         </view>
         <view class="con"></view>
       </view>
@@ -281,12 +281,13 @@
       <view class="orderInfoCon">
         <view class="title">共计</view>
         <view class="infoCon"></view>
-        <view class="con conColor">￥332</view>
+        <view class="con conColor">￥{{totalPrice}}</view>
       </view>
       <view class="orderInfoCon">
         <view class="title">应付</view>
-        <view class="infoCon">满减优惠46元</view>
-        <view class="con conColor">￥286</view>
+        <!-- <view class="infoCon">满减优惠46元</view> -->
+        <view class="infoCon"></view>
+        <view class="con conColor">￥{{totalPrice}}</view>
       </view>
       <view class="confirmMenu" wx:if="{{dinner}}">
         <view @tap="confirmOrder">确认菜单</view>
@@ -323,7 +324,9 @@ export default class Shoppingcart extends wepy.page {
     cartData: [], // 已经选取的菜
     dinner: true, // 用户身份(请客true/被请false)
     userInfo: null,
-    openId: ''
+    openId: '',
+    totalPrice: 0, // 总价
+    remarks: '' // 备注信息
   }
 
   methods = {
@@ -373,6 +376,11 @@ export default class Shoppingcart extends wepy.page {
       success: data => {
         if (data.data.success) {
           this.cartData = data.data.data.shopping_cart.list
+          let i = 0
+          this.totalPrice = 0
+          for (i in this.cartData) {
+            this.totalPrice += (this.cartData[i].product_information.discount * this.cartData[i].num)
+          }
           this.$apply()
         } else {
           wx.showModal({
@@ -382,6 +390,10 @@ export default class Shoppingcart extends wepy.page {
         }
       }
     })
+  }
+  // 获取备注信息
+  getRemarks(e) {
+    this.remarks = e.detail.value
   }
   // 确认订单
   confirmOrder() {
@@ -409,7 +421,8 @@ export default class Shoppingcart extends wepy.page {
       // data: upCartData,
       data: {
         exchange_list: upCartData,
-        qr_code: this.$parent.globalData.qr_code
+        qr_code: this.$parent.globalData.qr_code,
+        remarks: this.remarks
       },
       success: data => {
         if (data.data.success) {
