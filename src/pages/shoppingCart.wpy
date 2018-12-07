@@ -69,12 +69,6 @@
     align-items: center;
     justify-content: center;
   } 
-  .sel{
-    width: 80rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   .sample{
     width: 140rpx;
   }
@@ -83,7 +77,7 @@
     height: 140rpx;
   }
   .info{
-    width: 350rpx;
+    width: 400rpx;
     // height: 100%;
     padding: 27rpx;
     color: #999;
@@ -102,11 +96,11 @@
     height: 60rpx;
     line-height: 75rpx;
   }
-  .info span{
+  .info p{
     color: #ff5536;
   }
   .listConOperat{
-    width: 185rpx;
+    width: 135rpx;
     height: 137rpx;
     position: relative;
     display: flex;
@@ -145,9 +139,8 @@
     position: absolute;
     height: 40rpx;
     bottom: 0rpx;
-    display: flex;
-    align-items: right;
-    justify-content: center;
+    text-align:right;
+    padding-right:40rpx;
   }
   .orderInfo{
     background-color: #fff;
@@ -208,6 +201,9 @@
     align-items: center;
     justify-content: center;
   }
+  .originalPrice{
+    text-decoration:line-through;
+  }
   checkbox .wx-checkbox-input{
    border-radius: 50%;/* 圆角 */
    width: 40rpx; /* 背景的宽 */
@@ -234,61 +230,39 @@
 <template>
   <scroll-view scroll-y="hidden">
     <view class="list">
-      <checkbox-group bindchange="selCommodity" data-index="{{index}}" data-checks="{{item.checks}}">
-        <view class="listCon">
-          <view class="sel">
-            <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
-          </view>
+      <repeat for="{{ cartData }}" item="item">
+        <view class="listCon" data-id="{{ item.product_id }}">
           <view class="sample">
-            <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+            <image class="organic_rice_pic" src="{{ item.product_information.img }}" />
           </view>
           <view class="info">
-            <view class="title">2048香辣蟹</view>
-            <view class="salesVolume">已售300份</view>
+            <view class="title">{{ item.product_information.name }}</view>
+            <view class="salesVolume">已售{{ item.product_information.sale_count }}份</view>
             <view class="price">
-              <span>￥168</span>元/份
+              <span class="originalPrice">
+                ￥<p>{{ item.product_information.price }}</p>元/份
+              </span>
+              <span>
+                <p>{{ item.product_information.discount }}</p>元/份
+              </span>
             </view>
+            <!-- <view class="price">
+              <span>￥{{ item.product_information.discount }}</span>元/份
+            </view> -->
           </view>
           <view class="listConOperat">
-            <view class="del">
+            <view class="del" data-id="{{ item.product_id }}" @tap="deleteShoppingCart">
               <image src="/img/delete.png" />
             </view>
-            <view class="conOperat">
-              ×11
-              <!-- <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view> -->
-              <!-- <view class="num">×11</view> -->
-              <!-- <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view> -->
-            </view>
+            <view class="conOperat">×{{ item.num }}</view>
+            <!-- <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
+              <view class="num">11</view>
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+            </view> -->
           </view>
         </view>
-        <repeat for="{{ cartData }}" item="item">
-          <view class="listCon">
-            <view class="sel">
-              <checkbox data-index="{{index}}" id="2" value="{{index}}" checked="{{item.checks}}"/>
-            </view>
-            <view class="sample">
-              <image class="organic_rice_pic" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
-            </view>
-            <view class="info">
-              <view class="title">2048香辣蟹</view>
-              <view class="salesVolume">已售300份</view>
-              <view class="price">
-                <span>￥168</span>元/份
-              </view>
-            </view>
-            <view class="listConOperat">
-              <view class="del">
-                <image src="/img/delete.png" />
-              </view>
-              <view class="conOperat">
-                <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
-                <view class="num">11</view>
-                <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
-              </view>
-            </view>
-          </view>
-        </repeat>
-      </checkbox-group>
+      </repeat>
       <view class="dataNullShow" wx:if="{{ cartData.length == 0 }}">暂未点餐</view>
     </view>
     <view class="orderInfo">
@@ -315,7 +289,7 @@
         <view class="con conColor">￥286</view>
       </view>
       <view class="confirmMenu" wx:if="{{dinner}}">
-        <view>确认菜单</view>
+        <view @tap="confirmOrder">确认菜单</view>
       </view>
     </view>
     <view class="operat operat-true" wx:if="{{dinner}}">
@@ -348,7 +322,8 @@ export default class Shoppingcart extends wepy.page {
     authorizationButton: true, // 控制授权按钮是否显示
     cartData: [], // 已经选取的菜
     dinner: true, // 用户身份(请客true/被请false)
-    userInfo: null
+    userInfo: null,
+    openId: ''
   }
 
   methods = {
@@ -363,36 +338,111 @@ export default class Shoppingcart extends wepy.page {
   //   this.$navigate('/pages/pay')
   // }
   onLoad(e) {
-    this.userInfo = this.$parent.globalData.userInfo
+    console.log(e)
+    // 确认用户身份(请客true/被请false)
+    this.dinner = this.$parent.globalData.dinner
+    if (this.dinner) {
+      this.openId = this.$parent.globalData.openId
+    } else {
+      this.openId = e.masterOpenId
+      this.$parent.globalData.openId = e.masterOpenId
+    }
+    // this.userInfo = this.$parent.globalData.userInfo
     console.log(this.userInfo)
     // 获取用户信息
     this.onGotUserInfo()
-    // 确认用户身份(请客true/被请false)
-    this.dinner = this.$parent.globalData.dinner
+    // 获取购物车菜单列表
+    this.getShoppingCart()
+  }
+  onShow() {
     // 获取购物车菜单列表
     this.getShoppingCart()
   }
   // 获取购物车菜单列表
   getShoppingCart() {
     // 如果用户信息为空则不执行请求
-    if (!this.$parent.globalData.openId) {
+    if (!this.openId) {
       return
     }
     wx.request({
       url: `${this.$parent.globalData.requestUrl}/api/getShoppingCart`,
       method: 'GET',
       header: {
-        AuthrizeOpenId: this.$parent.globalData.openId
+        AuthrizeOpenId: this.openId
       },
       success: data => {
-        console.log(data)
         if (data.data.success) {
-          // // 获取用户信息,及openID  并存入全局
-          // this.menuClass = data.data.data.product_categories.data
-          // this.menuClassId = this.menuClass[0].id
-          // // 获取菜单分类下的列表
-          // this.getMenu()
-          // this.$apply()
+          this.cartData = data.data.data.shopping_cart.list
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 确认订单
+  confirmOrder() {
+    let cartData = this.cartData
+    if (cartData.length === 0) {
+      wx.showModal({
+        title: '',
+        content: '请先点餐'
+      })
+      return
+    }
+    let upCartData = []
+    // 根据已经选中的菜品数据生成需要提交订单从菜品数据
+    let i = 0
+    for (i in cartData) {
+      let cartJson = {'product_id': cartData[i].product_id, 'num': cartData[i].num}
+      upCartData.push(cartJson)
+    }
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/addOrder`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      // data: upCartData,
+      data: {
+        exchange_list: upCartData,
+        qr_code: this.$parent.globalData.qr_code
+      },
+      success: data => {
+        if (data.data.success) {
+          // 返回上一页
+          wx.showModal({
+            title: '',
+            content: '确认成功'
+          })
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 删除购物车中的菜
+  deleteShoppingCart(e) {
+    let delId = e.currentTarget.dataset.id
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/deleteShoppingCart`,
+      method: 'DELETE',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        product_ids: [delId]
+      },
+      success: data => {
+        if (data.data.success) {
+          // 刷新数据
+          this.getShoppingCart()
         } else {
           wx.showModal({
             title: '',
@@ -454,7 +504,7 @@ export default class Shoppingcart extends wepy.page {
   }
   // 分享页面
   onShareAppMessage(res) {
-    let url = `pages/shoppingCart?userId=${this.userInfo.id}`
+    let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
     console.log(url)
     return {
       title: `${this.userInfo.nick_name}的邀请`,
