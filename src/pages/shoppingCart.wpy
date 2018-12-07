@@ -5,6 +5,16 @@
   scroll-view{
     height: auto;
   }
+  #getUserInfo {
+    position:fixed;
+    top:0;
+    width:750rpx !important;
+    height:100% !important;
+    padding:0rpx !important;
+    z-index:999;
+    background-color:rgba(255, 255, 255, 0);
+    color:#fff;
+  }
   .operat{
     background-color: #fff;
     width: 750rpx;
@@ -131,11 +141,12 @@
     text-align: center;
   }
   .listConOperat .conOperat{
+    width: 100%;
     position: absolute;
     height: 40rpx;
     bottom: 0rpx;
     display: flex;
-    align-items: center;
+    align-items: right;
     justify-content: center;
   }
   .orderInfo{
@@ -243,9 +254,10 @@
               <image src="/img/delete.png" />
             </view>
             <view class="conOperat">
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view>
-              <view class="num">11</view>
-              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view>
+              ×11
+              <!-- <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityDown">-</view> -->
+              <!-- <view class="num">×11</view> -->
+              <!-- <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" data-storage="{{item.good_information.storage}}" @tap="quantityUp">+</view> -->
             </view>
           </view>
         </view>
@@ -316,6 +328,10 @@
     <view class="operat operat-false" wx:if="{{!dinner}}">
       <view class="foot" @tap="foot">点餐</view>
     </view>
+    <!-- 授权按钮部分 -->
+    <view>
+      <button open-type="getUserInfo" wx:if="{{authorizationButton}}" id='getUserInfo' lang="zh_CN" @getuserinfo="onGotUserInfo"></button>
+    </view>
   </scroll-view>
 </template>
 
@@ -329,6 +345,7 @@ export default class Shoppingcart extends wepy.page {
   }
   mixins = []
   data = {
+    authorizationButton: true, // 控制授权按钮是否显示
     cartData: [], // 已经选取的菜
     dinner: true, // 用户身份(请客true/被请false)
     userInfo: null
@@ -348,6 +365,8 @@ export default class Shoppingcart extends wepy.page {
   onLoad(e) {
     this.userInfo = this.$parent.globalData.userInfo
     console.log(this.userInfo)
+    // 获取用户信息
+    this.onGotUserInfo()
     // 确认用户身份(请客true/被请false)
     this.dinner = this.$parent.globalData.dinner
     // 获取购物车菜单列表
@@ -355,6 +374,10 @@ export default class Shoppingcart extends wepy.page {
   }
   // 获取购物车菜单列表
   getShoppingCart() {
+    // 如果用户信息为空则不执行请求
+    if (!this.$parent.globalData.openId) {
+      return
+    }
     wx.request({
       url: `${this.$parent.globalData.requestUrl}/api/getShoppingCart`,
       method: 'GET',
@@ -431,7 +454,7 @@ export default class Shoppingcart extends wepy.page {
   }
   // 分享页面
   onShareAppMessage(res) {
-    let url = `pages/index?userId=${this.userInfo.id}`
+    let url = `pages/shoppingCart?userId=${this.userInfo.id}`
     console.log(url)
     return {
       title: `${this.userInfo.nick_name}的邀请`,
@@ -495,6 +518,77 @@ export default class Shoppingcart extends wepy.page {
             title: '',
             content: data.data.errmsg
           })
+        }
+      }
+    })
+  }
+  async onGotUserInfo() {
+    // 查看是否授权
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          wx.getUserInfo({
+            success: res => {
+              this.userInfo = res.userInfo
+              if (this.userInfo) {
+                this.authorizationButton = false
+                this.avatarUrl = this.userInfo.avatarUrl
+                this.nickName = this.userInfo.nickName
+                // 数据生效
+                this.$apply()
+                // 提交用户信息
+                this.setUserInfo(this.userInfo)
+                // 登陆
+                // this.userLogin(this.userInfo)
+                this.$parent.globalData.userInfo = this.userInfo
+                this.$apply()
+              }
+            }
+          })
+        }
+      }
+    })
+  }
+    // 提交用户信息
+  async setUserInfo(userInfo) {
+    if (this.$parent.globalData.openId) {
+      return
+    }
+    // 从组件中获取userInfo
+    // await wepy.login().then(res => {
+    //   this.code = res.code
+    // })
+    wepy.login({
+      success: res => {
+        if (res.code) {
+          this.code = res.code
+          wx.request({
+            url: `${this.$parent.globalData.requestUrl}/api/createOrUpdateUser`,
+            method: 'POST',
+            data: {
+              code: res.code,
+              nick_name: this.userInfo.nickName,
+              profile: this.userInfo.avatarUrl
+            },
+            success: data => {
+              if (data.data.success) {
+                // 获取用户信息,及openID  并存入全局
+                this.userInfo = data.data.user
+                this.openId = this.userInfo.open_id
+                this.$parent.globalData.userInfo = this.userInfo
+                this.$parent.globalData.openId = this.openId
+                this.$apply()
+              } else {
+                wx.showModal({
+                  title: '',
+                  content: data.data.errmsg
+                })
+              }
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
         }
       }
     })
