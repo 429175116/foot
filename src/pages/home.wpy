@@ -1,0 +1,108 @@
+<style lang="less">
+  page{
+    background-color: #666;
+    height: 100%;
+  }
+  scroll-view{
+    height: auto;
+  }
+  .instructions{
+    width: 700rpx;
+    height: 600rpx;
+    margin: 25rpx;
+    margin-top: 100rpx;
+  }
+  .scanCode{
+    width: 300rpx;
+    height: 150rpx;
+    margin: 100rpx 225rpx;
+  }
+
+  .developerInfo{
+  height: auto;
+  color: #333;
+  font-size: 20rpx !important;
+  margin-top:300rpx;
+  margin-bottom:130rpx;
+  text-align: center;
+  }
+  .developerName{
+    font-weight: 700;
+    font-size: 20rpx !important;
+  }
+  .developerInfo view{
+    height: auto;
+    min-height: 40rpx;
+    line-height: 40rpx;
+    font-size: 20rpx !important;
+  }
+  .developerPhone{
+    display: inline-block;
+    font-size: 20rpx !important;
+  }
+  .developerPhone view{
+    width: 130rpx;
+    display: inline-block;
+    font-size: 20rpx !important;
+  }
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+      <image class="instructions" src="/img/instructions.png" />
+      <image class="scanCode" @tap="scanCode" src="/img/scanCode.png" />
+      <view class="developerInfo">
+        <view class="developerName">技术支持</view>
+        <view>©2018 西安贝肯伟网络科技有限公司 版权所有</view>
+        <view class="developerPhone">
+          联系电话：
+          <view @tap="developerPhone" data-phone="029-84498995">029-84498995</view>
+          <!-- <view @tap="developerPhone" data-phone="029-68567800">029-68567800</view> -->
+        </view>
+        <view @tap="developerAddress">陕西省西安市高新区天谷八路软件新城研发基地二期A9栋405</view>
+      </view>
+  </scroll-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Pay extends wepy.page {
+  config = {
+    navigationBarTitleText: '点餐平台'
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+
+  }
+
+  methods = {
+    // 拨打公司电话
+    developerPhone(e) {
+      let phone = e.target.dataset.phone
+      if (phone) {
+        wx.makePhoneCall({
+          phoneNumber: phone,
+          success: function () {
+            console.log('拨打电话成功！')
+          },
+          fail: function () {
+            console.log('拨打电话失败！')
+          }
+        })
+      }
+    }
+  }
+  onLoad(e) {}
+  scanCode() {
+    // 允许从相机和相册扫码
+    wx.scanCode({
+      success: (res) => {
+        console.log(res)
+        // 销毁当前页{跳转}
+        this.$redirect('/'+res.path)
+      }
+    })
+  }
+}
+</script>

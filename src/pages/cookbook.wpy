@@ -476,8 +476,8 @@
     }
     // 搜索事件输入触发
     getPawData(e) {
-      this.setpawData = e.detail.value
-      if (this.setpawData === '') {
+      this.setSelData = e.detail.value
+      if (this.setSelData === '') {
         return
       }
       this.menuClassId = ''
@@ -486,7 +486,7 @@
         method: 'GET',
         data: {
           bistro_id: this.$parent.globalData.bistro_id,
-          name: this.setpawData
+          name: this.setSelData
         },
         success: data => {
           if (data.data.success) {

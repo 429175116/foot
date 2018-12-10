@@ -44,7 +44,7 @@
     line-height: 100rpx  !important;
     border-radius: 0  !important;
     color:#FFFFFF !important;
-    background-color:#333 !important;
+    background-color:#f28f20 !important;
   }
 
   .foot{
@@ -267,9 +267,14 @@
     </view>
     <view class="orderInfo">
       <view class="orderInfoCon">
+        <view class="title">房间密码</view>
+        <view class="infoCon"></view>
+        <view class="con">A-08</view>
+      </view>
+      <view class="orderInfoCon">
         <view class="title">备注</view>
         <view class="infoCon">
-          <input type="text" bindinput="getRemarks" placeholder="填写默认信息" />
+          <input type="text" bindinput="getRemarks" placeholder="填写备注信息" />
         </view>
         <view class="con"></view>
       </view>
@@ -341,18 +346,32 @@ export default class Shoppingcart extends wepy.page {
   //   this.$navigate('/pages/pay')
   // }
   onLoad(options) {
-    // 确认用户身份(请客true/被请false)
-    this.dinner = this.$parent.globalData.dinner
-    if (this.dinner) {
-      this.openId = this.$parent.globalData.openId
-    } else {
-      // 分享路径
-      // let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
-      this.openId = options.masterOpenId
-      this.$parent.globalData.openId = options.masterOpenId
+    // masterOpenId
+    console.log(options.masteropenid+'========masterOpenId=======')
+    if (options.masteropenid) {
+      this.$parent.globalData.bistro_id = options.bistro_id
+      this.openId = options.masteropenid
+      this.$parent.globalData.openId = options.masteropenid
       this.qr_code = options.qrcode
       this.$parent.globalData.qr_code = options.qrcode
+      this.dinner = false
+    } else {
+      this.dinner = true
+      this.openId = this.$parent.globalData.openId
     }
+    console.log(this.dinner+'========dinner=======')
+    // // 确认用户身份(请客true/被请false)
+    // this.dinner = this.$parent.globalData.dinner
+    // if (this.dinner) {
+    //   this.openId = this.$parent.globalData.openId
+    // } else {
+    //   // 分享路径
+    //   // let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
+    //   this.openId = options.masterOpenId
+    //   this.$parent.globalData.openId = options.masterOpenId
+    //   this.qr_code = options.qrcode
+    //   this.$parent.globalData.qr_code = options.qrcode
+    // }
     // this.userInfo = this.$parent.globalData.userInfo
     // 获取用户信息
     this.onGotUserInfo()
@@ -365,6 +384,7 @@ export default class Shoppingcart extends wepy.page {
   }
   // 获取购物车菜单列表
   getShoppingCart() {
+    console.log(this.openId + '=============openId===========')
     // 如果用户信息为空则不执行请求
     if (!this.openId) {
       return
@@ -519,7 +539,7 @@ export default class Shoppingcart extends wepy.page {
   }
   // 分享页面
   onShareAppMessage(res) {
-    let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
+    let url = `/pages/shoppingCart?bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
     return {
       title: `${this.userInfo.nickName}的邀请`,
       desc: '',
