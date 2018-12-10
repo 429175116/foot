@@ -95,7 +95,7 @@
   .iconfont{
     line-height:32px;
     font-size:24px;
-    color:#00dc4c;
+    color:#E64340;
     font-family:"iconfont" !important;
     font-style:normal;
     -webkit-font-smoothing:antialiased;
@@ -106,7 +106,7 @@
   .decrease>.iconfont,.increase>.iconfont {
     line-height:32px;
     font-size:24px;
-    color:#00dc4c;
+    color:#E64340;
   }
 
   .icon-cart{
@@ -129,6 +129,15 @@
     left:10px;
     width:100rpx;
     height:100rpx;
+    background-color: #E64340;
+    border-radius: 50rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cart image{
+    width: 70rpx;
+    height: 70rpx;
   }
   .bardge{
     position:absolute;
@@ -156,7 +165,9 @@
     bottom:0;
     left:0;
     right:0;
-    height:500rpx;
+    min-height:500rpx;
+    max-height: 100%;
+    height: auto;
     background:#fff;
   }
   .operation-wrapper {
@@ -170,9 +181,21 @@
   .remove-all-wrapper {
     color:#999;
     font-size:12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .remove-all-wrapper image {
+    width: 50rpx;
+    height: 50rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .products-wrapper {
-    height:300rpx;
+    min-height:300rpx;
+    max-height: 700rpx;
+    height: auto;
     overflow-y:auto;
   }
   .product-item {
@@ -289,103 +312,110 @@
     transform:translate(-50%, -50%) scale(1);
     -webkit-transform:translate(-50%, -50%) scale(1);
   }
+  scroll-view{
+    height: auto;
+  }
 </style>
 <template>
-  <view>
-    <view class="containertop">
-      <input type="text" class="containertopSearch" bindinput="getPawData" placeholder="搜索商品名称">
-    </view>
-    <view class="containerleft">
-      <repeat for="{{ menuClass }}" item="item">
-        <li wx:if='{{ item.id == menuClassId }}' class="menuClass active" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
-        <li wx:else class="menuClass notactive" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
-      </repeat>
-    </view>
-    <view class="container1">
-      <repeat for="{{ menu }}" item="item">
-        <view class="organic_rice" data-id="{{ item.id }}">
-          <image class="organic_rice_pic" src="{{ item.img }}" />
-          <view class="organic_rice_text">
-            <view class="rice">{{ item.name }}</view>
-            <view class="sale">{{ item.description }}</view>
-            <view class="sale">销量{{ item.sale_count }} | {{ item.status }}</view>
-            <view class="discount">
-              ￥<p>{{ item.price }}</p>
-              {{ item.discount }}
-              <span class="discount_price">元/份</span>
-            </view>
-          </view>
-          <view class="increase" data-id="{{ item.id }}" @tap="setCart">
-            <icon class="iconfont">+</icon>
-          </view>
-        </view>
-      </repeat>
-      <view wx:if="{{menu.length == 0}}" class="dataNullShow">暂无菜品</view>
-    </view>
+  <scroll-view scroll-y="hidden">
     <view>
-      <view class="cart">
-        <text class="bardge" wx:if="{{ cartData.length != 0 }}">{{ cartData.length }}</text>
-        <icon class="iconfont icon-cart products" @tap="cartClick">车</icon>
+      <view class="containertop">
+        <input type="text" class="containertopSearch" bindinput="getPawData" placeholder="搜索商品名称">
       </view>
-      <view class="main-wrapper" wx:if="{{showSelFont}}">
-        <view class="shop-cart-wrapper">
-          <view class="operation-wrapper">
-            <view class="select-all-wrapper">
-              <checkbox-group>
-                <checkbox value="true" checked=""></checkbox>选择全部
-              </checkbox-group>
+      <view class="containerleft">
+        <repeat for="{{ menuClass }}" item="item">
+          <li wx:if='{{ item.id == menuClassId }}' class="menuClass active" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
+          <li wx:else class="menuClass notactive" @tap="changeMenuClass" data-id='{{ item.id }}'>{{ item.name }}</li>
+        </repeat>
+      </view>
+      <view class="container1">
+        <repeat for="{{ menu }}" item="item">
+          <view class="organic_rice" data-id="{{ item.id }}">
+            <image class="organic_rice_pic" src="{{ item.img }}" />
+            <view class="organic_rice_text">
+              <view class="rice">{{ item.name }}</view>
+              <view class="sale">{{ item.description }}</view>
+              <view class="sale">销量{{ item.sale_count }} | {{ item.status }}</view>
+              <view class="discount">
+                ￥<p>{{ item.price }}</p>
+                {{ item.discount }}
+                <span class="discount_price">元/份</span>
+              </view>
             </view>
-            <view class="remove-all-wrapper" @tap="delCartDataAll">
-              <icon class="iconfont">-</icon>
-              清空
+            <view class="increase" data-id="{{ item.id }}" @tap="setCart">
+              <icon class="iconfont">+</icon>
             </view>
           </view>
-          <view class="products-wrapper">
-            <repeat for="{{ cartData }}" item="item">
-              <view class="product-item" data-id="{{ item.id }}">
-                <view>
-                  <checkbox-group data-wpychangeselect-a="">
-                    <checkbox value="1" checked=""></checkbox>
-                  </checkbox-group>
-                </view>
-                <view class="product-pic">
-                  <image src="{{ item.img }}" />
-                </view>
-                <view class="product-info">
-                  <text>{{ item.name }}</text>
-                  <text class="originalPrice">￥{{ item.price }}</text>
-                  <text class="currentPrice">￥{{ item.discount }}</text>
-                </view>
-                <view class="product-cart-control">
-                  <view class="controller-wrapper">
-                    <view class="decrease" data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numDown">
-                      <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
-                    </view>
-                    <view class="count-wrapper" data-num="{{ item.num }}" index="0">
-                      <picker  data-num="{{ item.num }}" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
-                        <view class="count">{{ item.num }}</view>
-                      </picker>
-                    </view>
-                    <view class="increase"  data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numUp">
-                      <icon class="iconfont" style="color: #E64340">+</icon>
+        </repeat>
+        <view wx:if="{{menu.length == 0}}" class="dataNullShow">暂无菜品</view>
+      </view>
+      <view>
+        <view class="cart" @tap="cartClick">
+          <text class="bardge" wx:if="{{ cartData.length != 0 }}">{{ cartData.length }}</text>
+          <!-- <icon class="iconfont icon-cart products" @tap="cartClick">车</icon> -->
+          <image src="/img/cartWhite.png" />
+        </view>
+        <view class="main-wrapper" wx:if="{{showSelFont}}">
+          <view class="shop-cart-wrapper">
+            <view class="operation-wrapper">
+              <view class="select-all-wrapper">
+                <!-- <checkbox-group>
+                  <checkbox value="true" checked=""></checkbox>选择全部
+                </checkbox-group> -->
+              </view>
+              <view class="remove-all-wrapper" @tap="delCartDataAll">
+                <!-- <icon class="iconfont">×</icon> -->
+                <image src="/img/delete.png" />
+                清空
+              </view>
+            </view>
+            <view class="products-wrapper">
+              <repeat for="{{ cartData }}" item="item">
+                <view class="product-item" data-id="{{ item.id }}">
+                  <!-- <view>
+                    <checkbox-group data-wpychangeselect-a="">
+                      <checkbox value="1" checked=""></checkbox>
+                    </checkbox-group>
+                  </view> -->
+                  <view class="product-pic">
+                    <image src="{{ item.img }}" />
+                  </view>
+                  <view class="product-info">
+                    <text>{{ item.name }}</text>
+                    <text class="originalPrice">￥{{ item.price }}</text>
+                    <text class="currentPrice">￥{{ item.discount }}</text>
+                  </view>
+                  <view class="product-cart-control">
+                    <view class="controller-wrapper">
+                      <view class="decrease" data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numDown">
+                        <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
+                      </view>
+                      <view class="count-wrapper" data-num="{{ item.num }}" index="0">
+                        <picker  data-num="{{ item.num }}" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
+                          <view class="count">{{ item.num }}</view>
+                        </picker>
+                      </view>
+                      <view class="increase"  data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numUp">
+                        <icon class="iconfont" style="color: #E64340">+</icon>
+                      </view>
                     </view>
                   </view>
                 </view>
-              </view>
-            </repeat>
-            
-          </view>
-          <view class="payment-wrapper">
-            <view class="price-wrapper">
-              <text class="price">￥{{allPrice}}元</text>
-              <text class="delivery-price">{{cartData.length}}样{{allNum}}份</text>
+              </repeat>
+              
             </view>
-            <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
+            <view class="payment-wrapper">
+              <view class="price-wrapper">
+                <text class="price">￥{{allPrice}}元</text>
+                <text class="delivery-price">{{cartData.length}}样{{allNum}}份</text>
+              </view>
+              <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
+            </view>
           </view>
         </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -433,6 +463,8 @@
         this.showSelFont = false
       } else {
         this.showSelFont = true
+        // 计算份数
+        this.allNum = this.countAllQuantity(this.cartData)
       }
     }
     getStorage() {
@@ -457,7 +489,6 @@
           name: this.setpawData
         },
         success: data => {
-          console.log(data)
           if (data.data.success) {
             // 获取用户信息,及openID  并存入全局
             this.menu = data.data.data.products
@@ -547,9 +578,11 @@
           if (num === 1) {
             this.cartData.splice(i, 1)
           }
+          break
         }
       }
-      this.allNum -= 1
+      // 计算份数
+      this.allNum = this.countAllQuantity(this.cartData)
     }
     // 数量加++++++
     numUp(e) {
@@ -561,10 +594,20 @@
           this.cartData[i].num += 1
           // 计入总价
           this.allPrice += parseFloat(this.cartData[i].discount)
-          return
+          break
         }
       }
-      this.allNum += 1
+      // 计算份数
+      this.allNum = this.countAllQuantity(this.cartData)
+    }
+    // 计算份数
+    countAllQuantity(numList) {
+      let i = 0
+      let num = 0
+      for (i in numList) {
+        num += numList[i].num
+      }
+      return num
     }
     // 清空
     delCartDataAll() {

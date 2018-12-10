@@ -244,7 +244,7 @@
 import wepy from 'wepy'
 export default class index extends wepy.page {
   config = {
-    navigationBarTitleText: '香辣虾'
+    navigationBarTitleText: '平台名次'
   }
   components = {
   }
@@ -272,8 +272,11 @@ export default class index extends wepy.page {
 
   }
 
-  onLoad(e) {
-    // qr_code 通过扫码获得 桌号
+  onLoad(options) {
+    // qr_code 通过扫码获得 店铺及餐桌的标识，用于请求店铺信息
+    // this.$parent.globalData.qr_code = options.qr_code
+    // this.qr_code = options.qr_code
+    // qr_code 通过扫码获得 店铺及餐桌的标识，用于请求店铺信息
     this.$parent.globalData.qr_code = '15c09ddd309f58'
     this.qr_code = '15c09ddd309f58'
     // 获取店铺信息
@@ -297,6 +300,10 @@ export default class index extends wepy.page {
           this.shopInfo = data.data.bistro
           // 店铺ID
           this.$parent.globalData.bistro_id = this.shopInfo.id
+          // 动态修改页面标题信息
+          wx.setNavigationBarTitle({
+            title: this.shopInfo.name
+          })
         } else {
           wx.showModal({
             title: '',

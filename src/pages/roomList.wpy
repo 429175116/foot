@@ -147,7 +147,7 @@ export default class Roomlist extends wepy.page {
     setpawData: '', // 密码
     password: '', // 密码
     listData: [], // 请客单列表
-    masterOpenId: '' //请客人的openId
+    masterOpenId: '' // 请客人的openId
   }
 
   methods = {}

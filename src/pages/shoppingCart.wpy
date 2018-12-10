@@ -340,18 +340,20 @@ export default class Shoppingcart extends wepy.page {
   // pay() {
   //   this.$navigate('/pages/pay')
   // }
-  onLoad(e) {
-    console.log(e)
+  onLoad(options) {
     // 确认用户身份(请客true/被请false)
     this.dinner = this.$parent.globalData.dinner
     if (this.dinner) {
       this.openId = this.$parent.globalData.openId
     } else {
-      this.openId = e.masterOpenId
-      this.$parent.globalData.openId = e.masterOpenId
+      // 分享路径
+      // let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
+      this.openId = options.masterOpenId
+      this.$parent.globalData.openId = options.masterOpenId
+      this.qr_code = options.qrcode
+      this.$parent.globalData.qr_code = options.qrcode
     }
     // this.userInfo = this.$parent.globalData.userInfo
-    console.log(this.userInfo)
     // 获取用户信息
     this.onGotUserInfo()
     // 获取购物车菜单列表
@@ -518,12 +520,11 @@ export default class Shoppingcart extends wepy.page {
   // 分享页面
   onShareAppMessage(res) {
     let url = `pages/shoppingCart?qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`
-    console.log(url)
     return {
-      title: `${this.userInfo.nick_name}的邀请`,
+      title: `${this.userInfo.nickName}的邀请`,
       desc: '',
       // 图片路径
-      imageUrl: this.userInfo.profile,
+      imageUrl: this.userInfo.avatarUrl,
       path: url
     }
   }
