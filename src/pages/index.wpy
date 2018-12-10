@@ -13,25 +13,30 @@
   .user{
     width: 750rpx;
     height: 470rpx;
+    margin-bottom: 74rpx;
   }
-  .bg{
-    width: 1500rpx;
-    height: 1500rpx;
-    border-radius: 750rpx;
-    position: absolute;
-    top: -1033rpx;
-    left: -375rpx;
-    overflow:hidden;
-    z-index: -10;
-    // padding: 150rpx;
-  }
-  .bg image{
+  .user image{
     width: 750rpx;
     height: 470rpx;
-    position: relative;
-    left: 375rpx;
-    top: 1040rpx;
   }
+  // .bg{
+  //   width: 1500rpx;
+  //   height: 1500rpx;
+  //   border-radius: 750rpx;
+  //   position: absolute;
+  //   top: -1033rpx;
+  //   left: -375rpx;
+  //   overflow:hidden;
+  //   z-index: -10;
+  //   // padding: 150rpx;
+  // }
+  // .bg image{
+  //   width: 750rpx;
+  //   height: 470rpx;
+  //   position: relative;
+  //   left: 375rpx;
+  //   top: 1040rpx;
+  // }
   .user .info{
     z-index: 3;
   }
@@ -71,13 +76,6 @@
     margin-left: 30%;
   }
 
-  .notlittletubiao {
-    float: left;
-    font-size: 40rpx;
-    /*margin-top: 10rpx;*/
-    margin-left: 30rpx;
-
-  }
   .bottomInfo{
     width: 750rpx;
     height: 240rpx;
@@ -87,13 +85,13 @@
     color: #999;
     font-size: 25rpx;
   }
-  .bottomInfo image{
-    width: 750rpx;
-    height: 240rpx;
-    position: absolute;
-    z-index: -10;
-    left:0rpx;
-  }
+  // .bottomInfo image{
+  //   width: 750rpx;
+  //   height: 240rpx;
+  //   position: absolute;
+  //   z-index: -10;
+  //   left:0rpx;
+  // }
   .setPow{
     width: 560rpx;
     height: 420rpx;
@@ -138,37 +136,86 @@
   scroll-view{
     height: auto;
   }
+  .textTitle, .textCon{
+    height: 80rpx;
+    line-height: 80rpx;
+    margin: auto;
+    color: #666;
+  }
+  .textTitle{
+    width: 360rpx;
+    font-size: 40rpx;
+    font-size: 600;
+  }
+  .textCon{
+    width: 404rpx;
+    font-size: 30rpx;
+  }
+
+  .developerInfo{
+  height: auto;
+  color: #666;
+  font-size: 20rpx !important;
+  margin-top:300rpx;
+  margin-bottom:130rpx;
+  text-align: center;
+}
+.developerName{
+  font-weight: 700;
+  font-size: 20rpx !important;
+}
+.developerInfo view{
+  height: auto;
+  min-height: 40rpx;
+  line-height: 40rpx;
+  font-size: 20rpx !important;
+}
+.developerPhone{
+  display: inline-block;
+  font-size: 20rpx !important;
+}
+.developerPhone view{
+  width: 130rpx;
+  display: inline-block;
+  font-size: 20rpx !important;
+}
 </style>
 <template>
   <scroll-view scroll-y="hidden">
     <view>
       <view class="user">
-        <view class="bg">
+        <image src="/img/homeUserBg.png" />
+        <!-- <view class="bg">
           <image src="/img/homeUserBg.png" />
         </view>
         <view class="info">
           <image class="profile" src="{{avatarUrl}}" />
           <view class="welcome" wx:if="{{nickName != ''}}">欢迎,{{nickName}}</view>
-        </view>
+        </view> -->
       </view>
-
+      <view class="textTitle">饿了么</view>
+      <view class="textCon">选择开启你的美味之旅吧！</view>
       <view class="singleOrOrder">
         <!-- <button @tap="single" class="orderButton">
           <image class="littletubiao" src="http://140.143.203.12:8094/storage/images/xiaotubiao1.png" />
           <view class="notlittletubiao">个人</view>
         </button> -->
-        <button @tap="newroom" class="orderButton">
-          <image class="littletubiao" src="http://140.143.203.12:8094/storage/images/xiaotubiao2.png" />
-          <view class="notlittletubiao">创建房间</view>
-        </button>
-        <button @tap="goorder" class="orderButton">
-          <image class="littletubiao" src="http://140.143.203.12:8094/storage/images/xiaotubiao2.png" />
-          <view class="notlittletubiao">进入房间</view>
-        </button>
+        <button @tap="newroom" class="orderButton">创建房间</button>
+        <button @tap="goorder" class="orderButton">进入房间</button>
       </view>
-      <view class="bottomInfo">
+      <!-- <view class="bottomInfo">
         由贝肯伟提供技术支持
         <image src="/img/homeUserBg.png" />
+      </view> -->
+      <view class="developerInfo">
+        <view class="developerName">技术支持</view>
+        <view>©2018 西安贝肯伟网络科技有限公司 版权所有</view>
+        <view class="developerPhone">
+          联系电话：
+          <view @tap="developerPhone" data-phone="029-84498995">029-84498995</view>
+          <!-- <view @tap="developerPhone" data-phone="029-68567800">029-68567800</view> -->
+        </view>
+        <view @tap="developerAddress">陕西省西安市高新区天谷八路软件新城研发基地二期A9栋405</view>
       </view>
     </view>
     <view class="mask" wx:if="{{newRoomDom}}">
@@ -265,6 +312,21 @@ export default class index extends wepy.page {
   methods = {
     handleViewTap() {
       console.log('clicked')
+    },
+    // 拨打公司电话
+    developerPhone(e) {
+      let phone = e.target.dataset.phone
+      if (phone) {
+        wx.makePhoneCall({
+          phoneNumber: phone,
+          success: function () {
+            console.log('拨打电话成功！')
+          },
+          fail: function () {
+            console.log('拨打电话失败！')
+          }
+        })
+      }
     }
   }
 
