@@ -39,8 +39,8 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/home', // 封面
       'pages/index', // 首页
+      'pages/home', // 封面
       'pages/cookbook', // 菜单(菜品选择)
       'pages/roomList', // 房间列表
       'pages/shoppingCart', // 购物车(订单确认)

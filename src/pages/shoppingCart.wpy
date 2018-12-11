@@ -346,8 +346,6 @@ export default class Shoppingcart extends wepy.page {
   //   this.$navigate('/pages/pay')
   // }
   onLoad(options) {
-    // masterOpenId
-    console.log(options.masteropenid+'========masterOpenId=======')
     if (options.masteropenid) {
       this.$parent.globalData.bistro_id = options.bistro_id
       this.openId = options.masteropenid
@@ -359,7 +357,6 @@ export default class Shoppingcart extends wepy.page {
       this.dinner = true
       this.openId = this.$parent.globalData.openId
     }
-    console.log(this.dinner+'========dinner=======')
     // // 确认用户身份(请客true/被请false)
     // this.dinner = this.$parent.globalData.dinner
     // if (this.dinner) {
@@ -384,7 +381,6 @@ export default class Shoppingcart extends wepy.page {
   }
   // 获取购物车菜单列表
   getShoppingCart() {
-    console.log(this.openId + '=============openId===========')
     // 如果用户信息为空则不执行请求
     if (!this.openId) {
       return
@@ -447,12 +443,41 @@ export default class Shoppingcart extends wepy.page {
         remarks: this.remarks
       },
       success: data => {
+        console.log(data)
         if (data.data.success) {
+          let order_id = data.data.data.order.id
+          let bistro_id = data.data.data.order.bistro_id
+          // 打印订单
+          this.printOrder(order_id, bistro_id)
           // 返回上一页
           wx.showModal({
             title: '',
             content: '确认成功'
           })
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 打印订单
+  printOrder(order_id, bistro_id) {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/printerOrder`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        order_id: order_id,
+        bistro_id: bistro_id
+      },
+      success: data => {
+        if (data.data.success) {
+          
         } else {
           wx.showModal({
             title: '',
@@ -568,7 +593,6 @@ export default class Shoppingcart extends wepy.page {
         pay_amount: upDataM
       },
       success: data => {
-        console.log(data)
         if (data.data.success) {
           wx.requestPayment({
             'timeStamp': data.data.data.config.timestamp,

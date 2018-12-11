@@ -100,7 +100,7 @@ export default class Pay extends wepy.page {
       success: (res) => {
         console.log(res)
         // 销毁当前页{跳转}
-        this.$redirect('/'+res.path)
+        this.$redirect('/' + res.path)
       }
     })
   }
