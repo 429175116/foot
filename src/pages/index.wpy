@@ -298,6 +298,9 @@ export default class index extends wepy.page {
   }
 
   onLoad(options) {
+    let data = {"success":true,"errcode":0,"errmsg":"","data":{"order":{"id":27,"user_id":1,"order_number":"201812120933525c10d600850b5","status":"\u672a\u652f\u4ed8","order_status":"\u672a\u5b8c\u6210","comment_status":"\u672a\u8bc4\u4ef7","bistro_id":1,"position_id":1,"sort_number":"35","remarks":null,"created_at":"2018-12-12 09:33:52","products":[{"num":1,"total_amount":"25.00","product_infomation":{"product":{"id":1,"bistro_id":1,"img":"http:\/\/140.143.203.12:8094\/storage\/images\/2018\/12\/10\/D4zPABNAMJ0hGcpP2dKo3eYRChc1ZmVi4uISHCZS.jpeg","status":"on_sale","name":"automan","discount":"25.00","price":"30.00","sale_count":0,"zan_number":0,"description":"safasgfag","created_at":"2018-12-10 07:22:22","updated_at":"2018-12-10 07:22:22","product_category_id":1,"deleted_at":null},"num":1}}],"total_amount":25}}}
+    console.log(data.success)
+    console.log(data.data.order)
     // qr_code 通过扫码获得 店铺及餐桌的标识，用于请求店铺信息
     this.$parent.globalData.qr_code = options.qr_code
     this.qr_code = options.qr_code
@@ -323,6 +326,7 @@ export default class index extends wepy.page {
       success: data => {
         if (data.data.success) {
           this.shopInfo = data.data.bistro
+          this.$parent.globalData.deskName = data.data.position.name
           // 店铺ID
           this.$parent.globalData.bistro_id = this.shopInfo.id
           // 动态修改页面标题信息
@@ -372,12 +376,13 @@ export default class index extends wepy.page {
       success: data => {
         if (data.data.success) {
           this.$navigate('/pages/shoppingCart')
-          // // 获取用户信息,及openID  并存入全局
-          // this.userInfo = data.data.user
-          // this.openId = this.userInfo.open_id
-          // this.$parent.globalData.userInfo = this.userInfo
-          // this.$parent.globalData.openId = this.openId
-          // this.$apply()
+          // 删除用户是否追加菜品标记值
+          wx.removeStorage({
+            key: 'menuAppend',
+            success: function(res) {
+              console.log(res.data)
+            } 
+          })
         } else {
           if (data.data.errcode === 40002) {
             this.$navigate('/pages/shoppingCart')
