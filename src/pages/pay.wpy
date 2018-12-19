@@ -44,7 +44,7 @@
     width: 100%;
     height: 62rpx;
     line-height: 62rpx;
-    color: #303030;
+    color: #333;
     font-size: 30rpx;
     font-weight: 600;
   }
@@ -57,11 +57,16 @@
     font-size: 30rpx;
     padding: 0 20rpx;
   }
-  .order .orderList{
+  .order .orderList, .orderListTitle{
     padding: 0 20rpx;
     height: auto;
     padding-bottom: 60rpx;
     font-size: 25rpx;
+  }
+  .orderListTitle .name,
+  .orderListTitle .num,
+  .orderListTitle .price{
+    color: #333 !important;
   }
   .order .list{
     display: flex;
@@ -102,9 +107,11 @@
   }
   .info .list .name{
     text-align: left;
+    width: 25%;
   }
   .info .list .con{
     text-align: right;
+    width: 75%;
   }
   .list span{
     color: #aaa;
@@ -119,9 +126,16 @@
     margin-bottom: 208rpx;
   }
   .returnHome{
+    width: 750rpx;
+    height: 200rpx;
     position: fixed;
-    left: 25rpx;
-    bottom: 60rpx;
+    bottom: 0rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+  }
+  .returnHome view{
     width: 700rpx;
     height: 88rpx;
     line-height: 88rpx;
@@ -129,53 +143,74 @@
     background-color: #ff4141;
     text-align: center;
     color: #fff;
-    margin: auto;
   }
 </style>
 <template>
   <scroll-view scroll-y="hidden">
     <view class="header">
       <view>
-        <image src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=989461950,1655471390&fm=26&gp=0.jpg" />
+        <image src="/img/payImgheader.png" />
       </view>
       <view class="payStatus">支付成功</view>
     </view>
     <view class="order">
-      <view class="title">香辣虾</view>
-      <view class="sontitle">香辣虾</view>
-      <view class="orderList">
+      <view class="title">{{shopName}}</view>
+      <!-- <view class="sontitle">香辣虾</view> -->
+      <view class="orderListTitle">
         <view class="list">
-          <view class="name">名字</view>
-          <view class="num">×100</view>
-          <view class="price">￥1000</view>
+          <view class="name">名称</view>
+          <view class="num">数量</view>
+          <view class="price">小计</view>
         </view>
       </view>
+      <repeat for="{{ orderDetailData.products }}" item="item">
+        <view class="orderList">
+          <view class="list">
+            <view class="name">{{ item.product_infomation.product.name }}</view>
+            <view class="num">{{item.num}}份</view>
+            <view class="price">￥{{ item.product_infomation.product.discount }}</view>
+          </view>
+        </view>
+      </repeat>
     </view>
     <view class="info">
       <view class="list">
+        <view class="name">序号</view>
+        <view class="con">{{orderDetailData.sort_number}}</view>
+      </view>
+      <view class="list">
+        <view class="name">单号</view>
+        <view class="con">{{orderDetailData.order_number}}</view>
+      </view>
+      <view class="list">
         <view class="name">桌号</view>
-        <view class="con">￥1000</view>
+        <view class="con">{{deskName}}</view>
       </view>
       <view class="list">
         <view class="name">备注</view>
-        <view class="con">
-          <span>￥1000</span>
-        </view>
+        <view class="con">{{orderDetailData.remarks}}</view>
       </view>
       <view class="list">
+        <view class="name">下单时间</view>
+        <view class="con">{{orderDetailData.created_at}}</view>
+      </view>
+      <!-- <view class="list">
         <view class="name">共计</view>
         <view class="con">
           <span class="price">￥1000</span>
         </view>
-      </view>
+      </view> -->
       <view class="list">
         <view class="name">实付款</view>
         <view class="con">
-          <span class="price">￥1000</span>
+          <span class="price">￥{{totalPrice}}</span>
         </view>
       </view>
     </view>
-    <view class="returnHome">返回首页</view>
+    <view class="returnHome">
+      <view @tap="goHome">返回首页</view>
+    </view>
+    
   </scroll-view>
 </template>
 
@@ -189,12 +224,64 @@ export default class Pay extends wepy.page {
   }
   mixins = []
   data = {
-
+    orderDetailData: null,
+    deskName: '', // 桌子名次(桌号)
+    shopName: '', // 店铺名称
+    totalPrice: 0
   }
 
   methods = {
 
   }
-  onLoad(e) {}
+  onLoad(e) {
+    // 获取桌子名称
+    this.deskName = this.$parent.globalData.deskName
+    // 店铺名称
+    this.shopName = this.$parent.globalData.shopName
+    // 获取订单详情
+    this.getOrderDetail()
+    wx.setNavigationBarTitle({
+      title: this.shopName
+    })
+  }
+  // 获取订单详情
+  getOrderDetail() {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/orderDetail/${this.$parent.globalData.order_id}`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      success: data => {
+        if (data.data.success) {
+          this.orderDetailData = data.data.data.order
+          let i = 0
+          let products = this.orderDetailData.products
+          let price = 0
+          this.orderNumber = this.orderDetailData.order_number
+          if (this.orderDetailData.remarks === null) {
+            this.orderDetailData.remarks = ''
+          }
+          // 计算总价
+          for (i in products) {
+            // price += parseFloat(products[i].total_amount) * products[i].num
+            price += parseFloat(products[i].total_amount)
+          }
+          this.totalPrice = price
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 返回首页
+  goHome() {
+    // 销毁当前页{跳转}
+    this.$redirect('/pages/home')
+  }
 }
 </script>

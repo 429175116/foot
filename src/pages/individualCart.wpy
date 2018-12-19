@@ -1,0 +1,734 @@
+<style lang="less">
+  page{
+    background-color: #e9e9e9;
+  }
+  scroll-view{
+    height: auto;
+  }
+  #getUserInfo {
+    position:fixed;
+    top:0;
+    width:750rpx !important;
+    height:100% !important;
+    padding:0rpx !important;
+    z-index:999;
+    background-color:rgba(255, 255, 255, 0);
+    color:#fff;
+  }
+  .orderDetailData{
+    margin-bottom: 120rpx;
+    margin-left: -25rpx;
+  }
+  .operat{
+    background-color: #fff;
+    width: 750rpx;
+    height: 100rpx;
+    position: fixed;
+    bottom: 0rpx;
+    box-shadow: 0px 0px 5px #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  .operat-true view{
+    width: 250rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+  }
+  .operat-false view{
+    width: 750rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+  }
+  button[type=primary] {
+    width: 250rpx !important;
+    height: 100rpx !important;
+    line-height: 100rpx  !important;
+    border-radius: 0  !important;
+    color:#FFFFFF !important;
+    background-color:#f28f20 !important;
+  }
+
+  .foot{
+    color: #ff5536;
+    background-color: #fff;
+  }
+  .pay{
+    color: #fff;
+    background-color: #ff5536;;
+  }
+  .list{
+    background-color: #fff;
+    width: 750rpx;
+    height: auto;
+    
+  }
+  .listCon{
+    width: 750rpx;
+    height: 187rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  } 
+  .sample{
+    width: 140rpx;
+  }
+  .sample image{
+    width: 140rpx;
+    height: 140rpx;
+  }
+  .info{
+    width: 400rpx;
+    // height: 100%;
+    padding: 27rpx;
+    color: #999;
+    font-size: 22rpx;
+  }
+  .info .title{
+    color: #333;
+    height: 30rpx;
+    line-height: 30rpx;
+  }
+  .info .salesVolume{
+    height: 55rpx;
+    line-height: 55rpx;
+  }
+  .info .price{
+    height: 60rpx;
+    line-height: 75rpx;
+  }
+  .info p{
+    color: #ff5536;
+  }
+  .listConOperat{
+    width: 135rpx;
+    height: 137rpx;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .listConOperat .del{
+    position: absolute;
+    right: 20rpx;
+    top: 0rpx;
+    width: 35rpx;
+    height: 35rpx;
+  }
+  .listConOperat .del image{
+    width: 35rpx;
+    height: 35rpx;
+  }
+  .listConOperat .numControl{
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border: 1rpx solid #999;
+    border-radius: 10rpx;
+    text-align: center;
+    color: #999;
+  }
+  .numContro2{
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border: 1rpx solid #E64340;
+    background-color: #E64340;
+    border-radius: 10rpx;
+    text-align: center;
+    color: #fff;
+  }
+  .listConOperat .num{
+    width: auto;
+    min-width: 55rpx;
+    max-width: 100rpx;
+    line-height: 40rpx;
+    text-align: center;
+  }
+  .listConOperat .conOperat{
+    width: 100%;
+    position: absolute;
+    height: 40rpx;
+    bottom: 0rpx;
+    text-align:right;
+    padding-right:40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .orderInfo{
+    background-color: #fff;
+    margin-top: 10rpx;
+    width: 750rpx;
+    // min-height: 100vh;
+    height: auto;
+    padding: 0 25rpx;
+    margin-bottom: 120rpx;
+  }
+  .orderInfoCon{
+    width: 700rpx;
+    height: 85rpx;
+    border-bottom: 1rpx solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30rpx;
+  }
+  .orderInfoCon .title{
+    width: 200rpx;
+    text-align: left;
+    padding: 0 15rpx;
+    color: #333;
+  }
+  .orderInfoCon .infoCon{
+    padding-left: 30rpx;
+    width: 425rpx;
+    color: #999;
+  }
+  .orderInfoCon .con{
+    width: 173rpx;
+    text-align: right;
+    color: #333;
+  }
+  .orderInfoCon .conColor{
+    color: #ff5536 !important;
+  }
+  .orderInfo input{
+    width: 100%;
+  }
+  .confirmMenu{
+    margin-top: 50rpx;
+    width: 700rpx;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .confirmMenu view{
+    width: 600rpx;
+    height: 90rpx;
+    border-radius: 20rpx;
+    font-size: 40rpx;
+    color: #fff;
+    background-color: #ff5536;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .originalPrice{
+    text-decoration:line-through;
+  }
+  .passwordShow{
+    display: flex;
+    align-items: right;
+    justify-content: right;
+  }
+  .passwordShow image{
+    width: 50rpx;
+    height: 50rpx;
+    margin: auto;
+    margin-right: 0;
+  }
+  .passwordShow span{
+    margin: auto;
+    margin-right: 0;
+  }
+  .orderDetailShow{
+    width: 700rpx;
+    height: 100rpx;
+    // border: 1rpx solid #ccc;
+    margin-top:50rpx;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    color: #999;
+    text-align: center;
+  }
+  .orderDetailShow image{
+    width: 40rpx;
+    height: 40rpx;
+    margin: auto;
+  }
+  .orderDetailShow view{
+    width: 100%rpx;
+    height: 50rpx;
+    text-align: center;
+    // margin: auto;
+  }
+  .orderDetailShowDown{
+    transform-origin:center center; //旋转中心要是正中间 才行
+    transform: rotate(0deg);
+    transition: transform 0.2s; //过度时间 可调
+  }
+  .orderDetailShowUp{
+    transform-origin:center center; //旋转中心要是正中间 才行
+    transform: rotate(180deg);
+    transition: transform 0.2s; //过度时间 可调
+  }
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+    <!-- <view class="list" wx:if="{{ cartData.length != 0 }}"> -->
+    <view class="list">
+      <repeat for="{{ cartData }}" item="item">
+        <view class="listCon" data-id="{{ item.product_id }}">
+          <view class="sample">
+            <image class="organic_rice_pic" src="{{ item.product_information.img }}" />
+          </view>
+          <view class="info">
+            <view class="title">{{ item.product_information.name }}</view>
+            <view class="salesVolume">已售{{ item.product_information.sale_count }}份</view>
+            <view class="price">
+              <!-- <span class="originalPrice">
+                <p>{{ item.product_information.price }}</p>元/份
+              </span> -->
+              <span>
+                ￥<p>{{ item.product_information.discount }}</p>
+              </span>
+            </view>
+          </view>
+          <view class="listConOperat">
+            <view class="del" data-id="{{ item.product_id }}" @tap="deleteShoppingCart">
+              <image src="/img/delete.png" />
+            </view>
+            <!-- <view class="conOperat">×{{ item.num }}</view> -->
+            <view class="conOperat">
+              <view class="numControl" data-index="{{index}}" data-num="{{item.num}}" @tap="quantityDown">-</view>
+              <view class="num">{{ item.num }}</view>
+              <view class="numContro2" data-index="{{index}}" data-num="{{item.num}}" @tap="quantityUp">+</view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+      <view class="dataNullShow" wx:if="{{ cartData.length == 0 }}">暂无已点菜品</view>
+    </view>
+    <view class="orderInfo">
+      <view class="orderInfoCon">
+        <view class="title">备注</view>
+        <view class="infoCon">
+          <input type="text" bindinput="getRemarks" placeholder="填写备注信息" />
+        </view>
+        <view class="con"></view>
+      </view>
+      <view class="orderInfoCon">
+        <view class="title">当前桌号</view>
+        <view class="infoCon"></view>
+        <view class="con">{{deskName}}</view>
+      </view>
+      <view class="orderInfoCon">
+        <view class="title">应付</view>
+        <view class="infoCon"></view>
+        <view class="con conColor">￥{{totalPrice}}</view>
+      </view>
+      <view class="confirmMenu" wx:if="{{!dinner}}">
+        <view @tap="individualconfirmOrder">支付</view>
+      </view>
+      <view class="orderDetailShow" @tap="orderDetailDataShowClick">
+        <view>查看已确认的菜单</view>
+        <image class="{{orderDetailTransform}}" src="{{orderDetailImg}}" />
+      </view>
+      <!-- 已经提交菜单显示 -->
+      <view class="list orderDetailData" wx:if="{{orderDetailDataShow}}">
+        <repeat for="{{ orderDetailData.products }}" item="item">
+          <view class="listCon" data-id="{{ item.product_infomation.product.id }}">
+            <view class="sample">
+              <image class="organic_rice_pic" src="{{ item.product_infomation.product.img }}" />
+            </view>
+            <view class="info">
+              <view class="title">{{ item.product_infomation.product.name }}</view>
+              <view class="salesVolume">{{ item.num }}份</view>
+              <view class="price">
+                <span class="originalPrice">
+                  ￥<p>{{ item.product_infomation.product.price }}</p>元/份
+                </span>
+                <span>
+                  <p>{{ item.product_infomation.product.discount }}</p>元/份
+                </span>
+              </view>
+            </view>
+            <view class="listConOperat">
+              <view class="conOperat">×{{ item.num }}</view>
+            </view>
+          </view>
+        </repeat>
+        <view class="dataNullShow" wx:if="{{orderDetailData.products.length == 0 || orderDetailData == null}}">暂无已确认菜品</view>
+      </view>
+    </view>
+    <view class="operat operat-false">
+      <view class="foot" @tap="foot">点餐</view>
+    </view>
+  </scroll-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Shoppingcart extends wepy.page {
+  config = {
+    navigationBarTitleText: '购物车'
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+    cartData: [], // 已经选取的菜
+    userInfo: null,
+    openId: '',
+    totalPrice: 0, // 总价
+    remarks: '', // 备注信息
+    upCartData: [],
+    deskName: '', // 桌子名次(桌号)
+    orderDetailData: null, // 已提交菜品数据
+    orderDetailDataShow: false, // 已提交的菜品是否显示
+    orderDetailImg: '/img/down.png', // 已提交的菜品按钮图片
+    orderNumber: '', // 订单号，用于支付功能
+    orderDetailTransform: '', // 图片方向
+    orderId: '',
+    bistroId: ''
+  }
+  methods = {
+
+  }
+  // 进入点餐页
+  foot() {
+    this.$navigate('/pages/cookbook')
+  }
+
+  onLoad(options) {
+    // 获取桌子名称
+    this.deskName = this.$parent.globalData.deskName
+    this.openId = this.$parent.globalData.openId
+  }
+
+  onShow() {
+    // 获取购物车菜单列表
+    this.getShoppingCart()
+  }
+
+  // 单人提交菜单流程发起  提交菜单=>支付=>打印
+  individualconfirmOrder() {
+    wx.showModal({
+      title: '',
+      content: '确认支付？',
+      success: res => {
+        if (res.confirm) {
+          // 确认订单
+          this.confirmOrder()
+        }
+      }
+    })
+  }
+  quantityUp(e) {
+    // 商品数量
+    // let num = e.currentTarget.dataset.num
+    // 下标
+    let index = e.currentTarget.dataset.index
+    let cartDataList = this.cartData
+    cartDataList[index].num += 1
+    let upCartDataJson = []
+    let i = 0
+    for (i in cartDataList) {
+      let cartJson = {'product_id': cartDataList[i].product_id, 'num': cartDataList[i].num}
+      upCartDataJson.push(cartJson)
+    }
+    // 提交购物车数据
+    this.setUpCartData(upCartDataJson)
+    this.$apply()
+  }
+  quantityDown(e) {
+    // 商品数量
+    let num = e.currentTarget.dataset.num
+    // 下标
+    let index = e.currentTarget.dataset.index
+    let cartDataList = this.cartData
+    if (num === 1) {
+      return
+    }
+    cartDataList[index].num -= 1
+    let upCartDataJson = []
+    let i = 0
+    for (i in cartDataList) {
+      let cartJson = {'product_id': cartDataList[i].product_id, 'num': cartDataList[i].num}
+      upCartDataJson.push(cartJson)
+    }
+    // 提交购物车数据
+    this.setUpCartData(upCartDataJson)
+    this.$apply()
+  }
+  setUpCartData(upCartDataJson) {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/addShoppingCartOneTime`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        addlist: upCartDataJson
+      },
+      success: data => {
+        if (data.data.success) {
+          // 获取购物车菜单列表
+          this.getShoppingCart()
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 确认订单
+  confirmOrder() {
+    let cartData = this.cartData
+    this.upCartData = []
+    // 根据已经选中的菜品数据生成需要提交订单从菜品数据
+    let i = 0
+    for (i in cartData) {
+      let cartJson = {'product_id': cartData[i].product_id, 'num': cartData[i].num}
+      this.upCartData.push(cartJson)
+    }
+    // 确认菜单
+    this.runConfirmOrder(this.upCartData)
+  }
+    // 确认菜单数据提交
+  runConfirmOrder(upCartData) {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/addOrder`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      // data: upCartData,
+      data: {
+        exchange_list: upCartData,
+        qr_code: this.$parent.globalData.qr_code,
+        remarks: this.remarks
+      },
+      success: data => {
+        if (data.data.success) {
+          this.orderId = data.data.data.order.id
+          this.bistroId = data.data.data.order.bistro_id
+          // 订单ID存入全局变量
+          this.$parent.globalData.order_id = this.orderId
+          // 获取购物车菜单列表
+          this.getShoppingCart()
+          // 获取订单详情
+          this.getOrderDetail()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+    // 获取订单详情
+  getOrderDetail() {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/orderDetail/${this.$parent.globalData.order_id}`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      success: data => {
+        if (data.data.success) {
+          this.orderDetailData = data.data.data.order
+          let i = 0
+          let products = this.orderDetailData.products
+          let price = 0
+          this.orderNumber = this.orderDetailData.order_number
+          // 计算总价
+          for (i in products) {
+            price += parseFloat(products[i].total_amount)
+          }
+          this.totalPrice = price
+          // 支付
+          this.submitDataMoney()
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 买单
+  async submitDataMoney() {
+    console.log('发起支付')
+    // this.printOrder(this.orderId, this.bistroId)
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/testpay`,
+      method: 'PUT',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        order_number: this.orderNumber
+      },
+      success: data => {
+        if (data.data.success) {
+          // 打印订单
+          this.printOrder(this.orderId, this.bistroId)
+          this.$redirect('/pages/pay')
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+    // this.$redirect('/pages/pay')
+    return
+    // loading图片显示
+    // this.loadingImgShow = true
+    // this.$apply()
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/beanPay`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      data: {
+        order_number: this.orderNumber
+      },
+      success: data => {
+        if (data.data.success) {
+          wx.requestPayment({
+            'timeStamp': data.data.data.config.timestamp,
+            'nonceStr': data.data.data.config.nonceStr,
+            'package': data.data.data.config.package,
+            'signType': data.data.data.config.signType,
+            'paySign': data.data.data.config.paySign,
+            'success': data => {
+              // loading图片隐藏
+              // this.loadingImgShow = false
+              this.$apply()
+              // 打印订单
+              this.printOrder(this.orderId, this.bistroId)
+              wepy.showModal({
+                title: '',
+                content: '买单成功',
+                showCancel: false
+              })
+              // 销毁当前页{跳转}
+              // this.$redirect('/pages/pay')
+            },
+            'fail': data => {
+              wepy.showModal({
+                title: '',
+                content: '买单失败',
+                showCancel: false
+              })
+            }
+          })
+        } else {
+          // this.loadingImgShow = false
+          this.$apply()
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 打印订单
+  printOrder(orderId, bistroId) {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/printerOrder`,
+      method: 'POST',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        order_id: orderId,
+        bistro_id: bistroId
+      },
+      success: data => {
+        if (!data.data.success) {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 获取购物车菜单列表
+  getShoppingCart() {
+    // 如果用户信息为空则不执行请求
+    if (!this.openId) {
+      return
+    }
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/getShoppingCart`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      success: data => {
+        if (data.data.success) {
+          this.cartData = data.data.data.shopping_cart.list
+          // let i = 0
+          // this.totalPrice = 0
+          // for (i in this.cartData) {
+          //   this.totalPrice += (this.cartData[i].product_information.discount * this.cartData[i].num)
+          // }
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 删除购物车中的菜
+  deleteShoppingCart(e) {
+    let delId = e.currentTarget.dataset.id
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/deleteShoppingCart`,
+      method: 'DELETE',
+      header: {
+        AuthrizeOpenId: this.openId
+      },
+      data: {
+        product_ids: [delId]
+      },
+      success: data => {
+        if (data.data.success) {
+          // 刷新数据
+          this.getShoppingCart()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
+  }
+  // 已提交菜品是否显示
+  orderDetailDataShowClick() {
+    if (this.orderDetailDataShow) {
+      this.orderDetailDataShow = false
+      this.orderDetailImg = '/img/down.png'
+      this.orderDetailTransform = 'orderDetailShowDown'
+    } else {
+      this.orderDetailDataShow = true
+      this.orderDetailImg = '/img/down.png'
+      this.orderDetailTransform = 'orderDetailShowUp'
+    }
+  }
+}
+</script>

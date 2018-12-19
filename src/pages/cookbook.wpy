@@ -16,26 +16,30 @@
   }
 
   .containerleft {
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
     background: #eee;
     float: left;
-    width: 25%;
+    width: 200rpx;
+    margin-bottom: 120rpx;
   }
   .menuClass {
-    width: 100%;
+    width: 180rpx;
     height: 100rpx;
     line-height: 100rpx;
-    /*background: #eee;*/
     display: inline-block;
-    text-align: center;
+    text-align: left;
+    padding-left: 20rpx;
     border-bottom: 1rpx solid #E5E5E5;
   }
   .active {
     background: #fff;
     color: #E64340;
+    border-left: 5rpx solid #E64340;
+    border-radius: 10rpx 0 0 10rpx;
   }
   .container1 {
     height: 100vh;
@@ -44,8 +48,9 @@
     box-sizing: border-box;
     /*background: #eee;*/
     float: right;
-    width: 75%;
+    width: 550rpx;
   }
+  
   .organic_rice{
     background:#fff;
     width:100%;
@@ -54,6 +59,9 @@
     height: auto;
     display:flex;
     padding:25rpx 0;
+  }
+  .container1 .organic_rice:last-child{
+    margin-bottom: 110rpx;
   }
   .organic_rice_pic{
     float:left;
@@ -67,6 +75,8 @@
   }
   .rice {
     font-size:30rpx;
+    height: 60rpx;
+    color: #333;
   }
   .sale{
     color:#999999;
@@ -158,7 +168,7 @@
     left:0;
     right:0;
     bottom:0;
-    background:rgba(0,0,0,0.6);
+    background:rgba(0,0,0,0.3);
   }
   .shop-cart-wrapper {
     position:fixed;
@@ -197,6 +207,7 @@
     max-height: 700rpx;
     height: auto;
     overflow-y:auto;
+    margin-bottom: 110rpx
   }
   .product-item {
     display:flex;
@@ -243,7 +254,7 @@
     text-align:center;
     display:flex;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-end;
   }
   .count-wrapper {
     flex:1;
@@ -268,6 +279,7 @@
     display:flex;
     flex-direction:column;
     padding-left:150rpx;
+    width:400rpx;
   }
   .price {
     color:#E64340;
@@ -290,6 +302,17 @@
   }
   .currentPrice{
     color:#E64340;
+  }
+  .cookBookCartShow{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:100rpx;
+    display:flex;
+    background:#fff;
+    justify-content:space-between;
+    z-index:9;
   }
   checkbox .wx-checkbox-input{
    border-radius: 50%;/* 圆角 */
@@ -315,6 +338,44 @@
   scroll-view{
     height: auto;
   }
+  .increase .num{
+    width:auto;
+    min-width:55rpx;
+    max-width:100rpx;
+    line-height:40rpx;
+    text-align:center;
+    color: #333;
+  }
+  .conOperat{
+    width: 100%;
+    position: absolute;
+    height: 40rpx;
+    bottom: 0rpx;
+    text-align:right;
+    padding-right:40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .numControl{
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border: 1rpx solid #999;
+    border-radius: 10rpx;
+    text-align: center;
+    color: #999;
+  }
+  .numContro2{
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border: 1rpx solid #E64340;
+    background-color: #E64340;
+    border-radius: 10rpx;
+    text-align: center;
+    color: #fff;
+  }
 </style>
 <template>
   <scroll-view scroll-y="hidden">
@@ -334,16 +395,19 @@
             <image class="organic_rice_pic" src="{{ item.img }}" />
             <view class="organic_rice_text">
               <view class="rice">{{ item.name }}</view>
-              <view class="sale">{{ item.description }}</view>
+              <!-- <view class="sale">{{ item.description }}</view> -->
               <view class="sale">销量{{ item.sale_count }} | {{ item.status }}</view>
-              <view class="discount">
-                ￥<p>{{ item.price }}</p>
-                {{ item.discount }}
-                <span class="discount_price">元/份</span>
-              </view>
+              <view class="discount">￥{{item.discount}}</view>
             </view>
-            <view class="increase" data-id="{{ item.id }}" @tap="setCart">
+            <!-- <view class="increase" data-id="{{ item.id }}" @tap="setCart">
+              <icon class="iconfont">-</icon> 
+              <icon class="iconfont">10</icon>
               <icon class="iconfont">+</icon>
+            </view> -->
+            <view class="increase">
+              <view class="numControl" wx:if="{{item.num > 0}}" data-index="{{index}}" data-num="{{item.num}}" @tap="quantityDown">-</view>
+              <view class="num" wx:if="{{item.num > 0}}">{{ item.num }}</view>
+              <view class="numContro2" data-index="{{index}}" data-num="{{item.num}}" @tap="quantityUp">+</view>
             </view>
           </view>
         </repeat>
@@ -355,18 +419,25 @@
           <!-- <icon class="iconfont icon-cart products" @tap="cartClick">车</icon> -->
           <image src="/img/cartWhite.png" />
         </view>
+        <!-- <view class="shop-cart-wrapper"> -->
+        <view class="cookBookCartShow">
+          <view class="price-wrapper"  @tap="cartClick">
+            <text class="price">￥{{allPrice}}元</text>
+            <text class="delivery-price">{{cartData.length}}样{{allNum}}份</text>
+          </view>
+          <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
+        </view>
+        <!-- </view> -->
         <view class="main-wrapper" wx:if="{{showSelFont}}">
+          <view class="main-wrapper"  @tap="cartClick"></view>
           <view class="shop-cart-wrapper">
             <view class="operation-wrapper">
-              <view class="select-all-wrapper">
-                <!-- <checkbox-group>
-                  <checkbox value="true" checked=""></checkbox>选择全部
-                </checkbox-group> -->
-              </view>
               <view class="remove-all-wrapper" @tap="delCartDataAll">
-                <!-- <icon class="iconfont">×</icon> -->
                 <image src="/img/delete.png" />
                 清空
+              </view>
+              <view class="remove-all-wrapper" @tap="cartClick">
+                <image src="/img/shutDown_2.png" />
               </view>
             </view>
             <view class="products-wrapper">
@@ -391,9 +462,7 @@
                         <icon class="iconfont icon-decrease" style="color: #E64340">-</icon>
                       </view>
                       <view class="count-wrapper" data-num="{{ item.num }}" index="0">
-                        <picker  data-num="{{ item.num }}" range="[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190]" value="0" index="0">
-                          <view class="count">{{ item.num }}</view>
-                        </picker>
+                        <view class="count">{{ item.num }}</view>
                       </view>
                       <view class="increase"  data-num="{{ item.num }}" data-id="{{ item.id }}" @tap="numUp">
                         <icon class="iconfont" style="color: #E64340">+</icon>
@@ -402,15 +471,14 @@
                   </view>
                 </view>
               </repeat>
-              
             </view>
-            <view class="payment-wrapper">
+            <!-- <view class="payment-wrapper">
               <view class="price-wrapper">
                 <text class="price">￥{{allPrice}}元</text>
                 <text class="delivery-price">{{cartData.length}}样{{allNum}}份</text>
               </view>
               <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
-            </view>
+            </view> -->
           </view>
         </view>
       </view>
@@ -444,7 +512,10 @@
       active: 'notactive',
       showSelFont: false,
       allPrice: 0,
-      allNum: 0
+      allNum: 0,
+      nextUrl: '',
+      menuClassNextUrl: '',
+      addShoppingCart: ''
     }
 
     methods = {
@@ -458,13 +529,63 @@
 
       }
     }
+    quantityUp(e) {
+      // 商品数量
+      // let num = e.currentTarget.dataset.num
+      // 下标
+      let index = e.currentTarget.dataset.index
+      let cookDataList = this.menu
+      cookDataList[index].num += 1
+
+      this.menu = cookDataList
+      let upCartDataJson = []
+      let i = 0
+      this.allNum = 0
+      this.allPrice = 0
+      for (i in cookDataList) {
+        if (cookDataList[i].num > 0) {
+          this.allPrice += parseFloat(cookDataList[i].discount) * cookDataList[i].num
+          this.allNum += cookDataList[i].num
+          // 菜品加入购物车
+          upCartDataJson.push(cookDataList[i])
+        }
+      }
+      this.cartData = upCartDataJson
+      this.$apply()
+    }
+    quantityDown(e) {
+      // 商品数量
+      let num = e.currentTarget.dataset.num
+      // 下标
+      let index = e.currentTarget.dataset.index
+      let cookDataList = this.menu
+      if (num === 0) {
+        return
+      }
+      cookDataList[index].num -= 1
+      this.menu = cookDataList
+      let upCartDataJson = []
+      let i = 0
+      this.allNum = 0
+      this.allPrice = 0
+      for (i in cookDataList) {
+        if (cookDataList[i].num > 0) {
+          this.allPrice += parseFloat(cookDataList[i].discount) * cookDataList[i].num
+          this.allNum += cookDataList[i].num
+          // 菜品加入购物车
+          upCartDataJson.push(cookDataList[i])
+        }
+      }
+      this.cartData = upCartDataJson
+    }
+
     cartClick() {
       if (this.showSelFont) {
         this.showSelFont = false
       } else {
         this.showSelFont = true
-        // 计算份数
-        this.allNum = this.countAllQuantity(this.cartData)
+        // // 计算份数
+        // this.allNum = this.countAllQuantity(this.cartData)
       }
     }
     getStorage() {
@@ -494,7 +615,7 @@
             this.menu = data.data.data.products
             for (let i = 0; i < this.menu.length; i++) {
               // 加入选择个数，默认为0，用于和点餐时存储数量
-              this.menu[i]['num'] = 1
+              this.menu[i]['num'] = 0
             }
             this.$apply()
           } else {
@@ -520,12 +641,18 @@
         },
         success: data => {
           if (data.data.success) {
+            data = data.data.data.products
             // 获取用户信息,及openID  并存入全局
-            this.menu = data.data.data.products.data
+            this.menu = data.data
             for (let i = 0; i < this.menu.length; i++) {
               // 加入选择个数，默认为0，用于和点餐时存储数量
-              this.menu[i]['num'] = 1
+              this.menu[i]['num'] = 0
             }
+            this.nextUrl = ''
+            if (data.meta.pagination.links.length !== 0) {
+              this.nextUrl = data.meta.pagination.links.next
+            }
+            console.log(this.nextUrl)
             this.$apply()
           } else {
             wx.showModal({
@@ -536,34 +663,43 @@
         }
       })
     }
-    // 菜品加入购物车
-    setCart(e) {
-      let menuId = e.currentTarget.dataset.id
-      // 根据菜品ID给购物车加入选中的菜品数据
-      // this.cartData // 购物车数据
-      // this.menu // 菜单数据
-      let i = 0
-      let x = 0
-      let menu = this.menu
-      // 多次点击一个则数量增加
-      for (x in this.cartData) {
-        if (menuId === this.cartData[x].id) {
-          this.cartData[x].num += 1
-          // 计入总价
-          this.allPrice += parseFloat(this.cartData[x].discount)
-          return
-        }
+    // 页面上拉触底事件的处理函数
+    async onReachBottom() {
+      if (!this.nextUrl) {
+        return
       }
-      // 不重复点击则种类增加
-      for (i in menu) {
-        if (menuId === menu[i].id) {
-          this.cartData.push(menu[i])
-          // 计入总价
-          this.allPrice += parseFloat(menu[i].discount)
-          return
+      // await wepy.login().then(res => {
+      //   this.code = res.code
+      // })
+      await wx.request({
+        url: this.nextUrl,
+        method: 'GET',
+        data: {
+          product_category_id: this.menuClassId
+        },
+        success: data => {
+          if (data.data.success) {
+            data = data.data.data.products
+            // 获取用户信息,及openID  并存入全局
+            let newlist = data.data
+            for (let i = 0; i < newlist.length; i++) {
+              // 加入选择个数，默认为0，用于和点餐时存储数量
+              newlist[i]['num'] = 0
+              this.menu.push(newlist[i])
+            }
+            this.nextUrl = ''
+            if (data.meta.pagination.links.length !== 0) {
+              this.nextUrl = data.meta.pagination.links.next
+            }
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
         }
-      }
-      this.allNum += 1
+      })
     }
     // 数量减------
     numDown(e) {
@@ -631,20 +767,31 @@
         let cartJson = {'product_id': cartData[i].id, 'num': cartData[i].num}
         upCartData.push(cartJson)
       }
+      if (this.$parent.globalData.mode) {
+        this.addShoppingCart = 'addShoppingCartOneTime'
+      } else {
+        this.addShoppingCart = 'addShoppingCartOneTimeToOther'
+      }
       wx.request({
-        url: `${this.$parent.globalData.requestUrl}/api/addShoppingCartOneTime`,
+        url: `${this.$parent.globalData.requestUrl}/api/${this.addShoppingCart}`,
         method: 'POST',
         header: {
           AuthrizeOpenId: this.$parent.globalData.openId
         },
         // data: upCartData,
         data: {
-          addlist: upCartData
+          addlist: upCartData,
+          qr_code: this.$parent.globalData.qr_code,
+          open_id: this.$parent.globalData.openId
         },
         success: data => {
           if (data.data.success) {
             // 返回上一页
-            wx.navigateBack({ changed: true })
+            if (this.$parent.globalData.mode) {
+              this.$redirect('/pages/individualCart')
+            } else {
+              wx.navigateBack({ changed: true })
+            }
           } else {
             wx.showModal({
               title: '',
@@ -701,10 +848,53 @@
         },
         success: data => {
           if (data.data.success) {
-            this.menuClass = data.data.data.product_categories.data
+            data = data.data.data.product_categories
+            this.menuClass = data.data
             this.menuClassId = this.menuClass[0].id
             // 获取菜单分类下的列表
             this.getMenu()
+            if (data.meta.pagination.links.length !== 0) {
+              this.menuClassNextUrl = data.meta.pagination.links.next
+              // 加载下一页数据
+              this.getMenuClassNextUrl()
+            }
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    getMenuClassNextUrl() {
+      if (this.menuClassNextUrl === '') {
+        return
+      }
+      wx.request({
+        url: this.menuClassNextUrl,
+        method: 'GET',
+        data: {
+          bistro_id: this.$parent.globalData.bistro_id
+        },
+        success: data => {
+          if (data.data.success) {
+            data = data.data.data.product_categories
+            let menuClassData = data.data
+            let i = 0
+            for (i in menuClassData) {
+              this.menuClass.push(menuClassData[i])
+            }
+            console.log(this.menuClass)
+            if (data.meta.pagination.links.length !== 0) {
+              this.menuClassNextUrl = data.meta.pagination.links.next
+              // 递归
+              this.getMenuClassNextUrl()
+            } else {
+              this.this.menuClassNextUrl = ''
+              return
+            }
             this.$apply()
           } else {
             wx.showModal({

@@ -9,19 +9,6 @@
     background-color:rgba(255, 255, 255, 0);
     color:#fff;
   }
-
-  .user{
-    width: 750rpx;
-    height: 470rpx;
-    margin-bottom: 74rpx;
-  }
-  .user image{
-    width: 750rpx;
-    height: 470rpx;
-  }
-  .user .info{
-    z-index: 3;
-  }
   
   .profile {
     position: relative;
@@ -31,112 +18,49 @@
     margin: 130rpx auto 20rpx auto;
     border-radius: 90rpx;
   }
-
-  .welcome {
-    color: #fff;
-    width: 100%;
-    font-size: 40rpx;
-    text-align: center;
-  }
-  .singleOrOrder {
-    width: 100%;
-  }
-
-  .orderButton {
-    width: 515rpx;
-    height: 100rpx;
-    line-height: 100rpx !important;
-    margin: 40rpx auto;
-    // padding: 20rpx 0;
-    color: #fff;
-    background-color: #fc4c4f;
-    // background-color: #666;
-    box-shadow: 0px 0px 5px #ccc;
-  }
-
-  .littletubiao {
-    width: 100rpx;
-    height: 100rpx;
-    float: left;
-    margin-left: 30%;
-  }
-
-  .bottomInfo{
+  .bgimg{
     width: 750rpx;
-    height: 240rpx;
-    margin-top: 120rpx;
-    line-height: 95rpx;
-    text-align: center;
-    color: #999;
-    font-size: 25rpx;
+    height: 100vh;
   }
 
-  .setPow{
-    width: 560rpx;
-    height: 420rpx;
-    border-radius: 20rpx;
-    background-color: #f0f0f0;
-  }
-  .setPow view{
+  .singleOrOrder {
+    position: absolute;
+    top: 0;
+    width: 750rpx;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .setPow .title{
-    width: 100%;
-    height: 95rpx;
-    color: #666;
-    border-bottom: 1rpx solid #ccc;
-  }
-  .setData input{
-    width: 460rpx;
-    height: 85rpx;
+
+  .orderButton {
+    width: 228rpx;
+    height: 163rpx;
+    line-height: 45rpx !important;
     background-color: #fff;
-    border-radius: 10rpx;
-    margin-top: 60rpx;
-    margin-bottom: 45rpx;
-    text-align: center;
+    box-shadow: 0px 0px 5px #ccc;
+    color: #fc4c4f;
   }
-  .upData view{
-    width: 260rpx;
-    height: 90rpx;
-    color: #fff;
-    border-radius: 10rpx;
-    background-color: #fc4c4f;
+  .orderButton view{
+    width: 100%;
+    height: 36rpx;
   }
-  .hideMask{
-    position: absolute;
-    bottom: 160rpx;
+  .orderButton image{
+    width: 83rpx;
+    height: 66rpx;
+    margin-top: 30rpx;
   }
-  .hideMask image{
-    width: 100rpx;
-    height: 100rpx;
-  }
+
   scroll-view{
     height: auto;
-  }
-  .textTitle, .textCon{
-    height: 80rpx;
-    line-height: 80rpx;
-    margin: auto;
-    color: #666;
-  }
-  .textTitle{
-    width: 360rpx;
-    font-size: 40rpx;
-    font-size: 600;
-  }
-  .textCon{
-    width: 404rpx;
-    font-size: 30rpx;
   }
 
   .developerInfo{
   height: auto;
   color: #666;
   font-size: 20rpx !important;
-  margin-top:300rpx;
-  margin-bottom:130rpx;
+  margin-top: 100rpx;
+  margin-bottom: 130rpx;
   text-align: center;
   }
   .developerName{
@@ -158,47 +82,33 @@
     display: inline-block;
     font-size: 20rpx !important;
   }
+
 </style>
 <template>
   <scroll-view scroll-y="hidden">
-    <view>
-      <view class="user">
-        <image src="/img/homeUserBg.png" />
-      </view>
-      <view class="textTitle">哎,真香</view>
-      <view class="textCon">选择开启你的美味之旅吧！</view>
-      <view class="singleOrOrder">
-        <button @tap="newroom" class="orderButton">创建房间</button>
-        <button @tap="goorder" class="orderButton">进入房间</button>
-      </view>
-      <view class="developerInfo">
-        <view class="developerName">技术支持</view>
-        <view>©2018 西安贝肯伟网络科技有限公司 版权所有</view>
-        <view class="developerPhone">
-          联系电话：
-          <view @tap="developerPhone" data-phone="029-84498995">029-84498995</view>
-        </view>
-        <view @tap="developerAddress">陕西省西安市高新区天谷八路软件新城研发基地二期A9栋405</view>
-      </view>
+    <image src="{{homeUserBg}}" class="bgimg" />
+    <view class="singleOrOrder">
+      <button @tap="individualOrder" class="orderButton">
+        <image src="{{individualimg}}"/>
+        <view>单人</view>
+      </button>
+      <button @tap="createRoom" class="orderButton">
+        <image src="{{manyimg}}" />
+        <view>{{goroomText}}</view>
+      </button>
     </view>
-    <view class="mask" wx:if="{{newRoomDom}}">
-    <!-- <view class="mask"> -->
-      <view class="setPow">
-        <view class="title">请输入六位数字密码</view>
-        <view class="setData">
-          <input type="digit" bindinput="getPawData" placeholder="请输入六位密码" />
-        </view>
-        <view class="upData">
-          <view @tap="newRoom">确认</view>
-        </view>
+    <view class="developerInfo">
+      <view class="developerName">技术支持</view>
+      <view>©2018 西安贝肯伟网络科技有限公司 版权所有</view>
+      <view class="developerPhone">
+        联系电话：
+        <view @tap="developerPhone" data-phone="029-84498995">029-84498995</view>
       </view>
-      <view class="hideMask" @tap="hideMask">
-        <image src="/img/shutDown.png" />
-      </view>
+      <view @tap="developerAddress">陕西省西安市高新区天谷八路软件新城研发基地二期A9栋405</view>
     </view>
     <!-- 授权按钮部分 -->
     <view>
-      <button open-type="getUserInfo" wx:if="{{authorizationButton}}" id='getUserInfo' lang="zh_CN" @getuserinfo="onGotUserInfo"></button>
+      <button open-type="getUserInfo" wx:if="{{authorizationButton}}" id='getUserInfo' lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
     </view>
   </scroll-view>
 </template>
@@ -262,14 +172,18 @@ export default class index extends wepy.page {
   data = {
     authorizationButton: true, // 控制授权按钮是否显示
     userInfo: null,
-    avatarUrl: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLRCZUOeCoWxrjGUrhTVFuvVLKRz08BUM6Y88qy8SxGuBDBKT97rRrYyXyrSNb2Exeuf6YXgVyreQ/132',
     nickName: '',
     code: '',
     newRoom: true,
     setpassword: '',
-    newRoomDom: false,
     qr_code: '',
-    shopInfo: null
+    shopInfo: null,
+    goroomText: '创建房间',
+    myRoomisStatus: false,
+    masterOpenId: '',
+    individualimg: '/img/individualimg.png',
+    manyimg: '/img/manyimg.png',
+    homeUserBg: '/img/homeUserBg.png'
   }
 
   methods = {
@@ -298,19 +212,69 @@ export default class index extends wepy.page {
   }
 
   onLoad(options) {
-    let data = {"success":true,"errcode":0,"errmsg":"","data":{"order":{"id":27,"user_id":1,"order_number":"201812120933525c10d600850b5","status":"\u672a\u652f\u4ed8","order_status":"\u672a\u5b8c\u6210","comment_status":"\u672a\u8bc4\u4ef7","bistro_id":1,"position_id":1,"sort_number":"35","remarks":null,"created_at":"2018-12-12 09:33:52","products":[{"num":1,"total_amount":"25.00","product_infomation":{"product":{"id":1,"bistro_id":1,"img":"http:\/\/140.143.203.12:8094\/storage\/images\/2018\/12\/10\/D4zPABNAMJ0hGcpP2dKo3eYRChc1ZmVi4uISHCZS.jpeg","status":"on_sale","name":"automan","discount":"25.00","price":"30.00","sale_count":0,"zan_number":0,"description":"safasgfag","created_at":"2018-12-10 07:22:22","updated_at":"2018-12-10 07:22:22","product_category_id":1,"deleted_at":null},"num":1}}],"total_amount":25}}}
-    console.log(data.success)
-    console.log(data.data.order)
     // qr_code 通过扫码获得 店铺及餐桌的标识，用于请求店铺信息
     this.$parent.globalData.qr_code = options.qr_code
     this.qr_code = options.qr_code
     // qr_code 通过扫码获得 店铺及餐桌的标识，用于请求店铺信息
-    this.$parent.globalData.qr_code = '15c0e13d66e7eb'
-    this.qr_code = '15c0e13d66e7eb'
+    // this.$parent.globalData.qr_code = '15c0e13d66e7eb'
+    // this.qr_code = '15c0e13d66e7eb'
     // 获取店铺信息
     this.getShopInfo()
     // 获取用户信息
-    this.onGotUserInfo()
+    this.onGetUserInfo()
+  }
+  // 单人点餐
+  individualOrder() {
+    this.$parent.globalData.mode = true
+    this.$redirect('/pages/cookbook')
+  }
+  // 多人点餐
+  manyPeopleOrder() {
+    this.$parent.globalData.mode = false
+    this.$redirect(`/pages/shoppingCart?deskname=${this.$parent.globalData.deskName}&bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.masterOpenId}`)
+  }
+  // 获取当前桌子的请客单列表,用于判断是否已经创建房间
+  getRoomList() {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/nowDinner`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      data: {
+        qr_code: this.$parent.globalData.qr_code
+      },
+      success: data => {
+        console.log(data)
+        if (data.data.success) {
+          // 获取当前桌请客列表
+          let listData = data.data.data
+          let openId = this.$parent.globalData.openId
+          console.log(listData)
+          if (listData.length !== 0) {
+            this.goroomText = '进入房间'
+            this.masterOpenId = listData.master_open_id
+            this.$redirect(`/pages/shoppingCart?deskname=${this.$parent.globalData.deskName}&bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.masterOpenId}`)
+          } else {
+          }
+          if (openId === listData.master_open_id) {
+            this.goroomText = '我的房间'
+            this.myRoomisStatus = true
+            // 绑定用户身份，确认是否请客
+            // 请客--true  被请--false
+            this.$parent.globalData.dinner = true
+            this.masterOpenId = listData.master_open_id
+            this.$redirect(`/pages/shoppingCart?deskname=${this.$parent.globalData.deskName}&bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.masterOpenId}`)
+          }
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
   }
   // 获取店铺信息
   getShopInfo() {
@@ -326,9 +290,13 @@ export default class index extends wepy.page {
       success: data => {
         if (data.data.success) {
           this.shopInfo = data.data.bistro
+          // 桌号
           this.$parent.globalData.deskName = data.data.position.name
+          // 店铺名称
+          this.$parent.globalData.shopName = this.shopInfo.name
           // 店铺ID
           this.$parent.globalData.bistro_id = this.shopInfo.id
+          console.log(this.$parent.globalData.bistro_id)
           // 动态修改页面标题信息
           wx.setNavigationBarTitle({
             title: this.shopInfo.name
@@ -342,27 +310,9 @@ export default class index extends wepy.page {
       }
     })
   }
-  // 获取输入的密码
-  getPawData(e) {
-    this.setpawData = e.detail.value
-  }
-  // 隐藏创建房间浮层
-  hideMask() {
-    this.newRoomDom = false
-  }
   // 创建房间
-  newRoom() {
-    if (!this.setpawData) {
-      wx.showModal({
-        title: '',
-        content: '请输入密码'
-      })
-      return
-    }
-    // 绑定用户身份，确认是否请客
-    // 请客--true  被请--false
-    this.$parent.globalData.dinner = true
-    this.newRoomDom = false
+  createRoom() {
+    console.log('创建')
     wx.request({
       url: `${this.$parent.globalData.requestUrl}/api/createDinner`,
       method: 'POST',
@@ -370,32 +320,39 @@ export default class index extends wepy.page {
         AuthrizeOpenId: this.$parent.globalData.openId
       },
       data: {
-        qr_code: this.qr_code,
-        password: this.setpawData
+        qr_code: this.qr_code
+        // password: this.setpawData
       },
       success: data => {
         if (data.data.success) {
-          this.$navigate('/pages/shoppingCart')
+          // 绑定用户身份，确认是否请客
+          // 请客--true  被请--false
+          this.$parent.globalData.dinner = true
           // 删除用户是否追加菜品标记值
           wx.removeStorage({
             key: 'menuAppend',
             success: function(res) {
               console.log(res.data)
-            } 
+            }
           })
+          this.$redirect(`/pages/shoppingCart?deskname=${this.$parent.globalData.deskName}&bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.$parent.globalData.openId}`)
         } else {
-          if (data.data.errcode === 40002) {
-            this.$navigate('/pages/shoppingCart')
+          if (data.data.errcode === 40001 && data.data.errmsg === '此桌以有人请客') {
+            // 如果房间已经创建，则执行进入房间代码
+            this.manyPeopleOrder()
+            return
           }
           wx.showModal({
             title: '',
             content: data.data.errmsg
           })
+          // // 如果房间已经创建，则执行进入房间代码
+          // this.manyPeopleOrder()
         }
       }
     })
   }
-  async onGotUserInfo() {
+  async onGetUserInfo() {
     // 查看是否授权
     wx.getSetting({
       success: res => {
@@ -426,12 +383,10 @@ export default class index extends wepy.page {
     // 提交用户信息
   async setUserInfo(userInfo) {
     if (this.$parent.globalData.openId) {
+      // 获取当前桌子的请客单列表
+      this.getRoomList()
       return
     }
-    // 从组件中获取userInfo
-    // await wepy.login().then(res => {
-    //   this.code = res.code
-    // })
     wepy.login({
       success: res => {
         if (res.code) {
@@ -451,6 +406,8 @@ export default class index extends wepy.page {
                 this.openId = this.userInfo.open_id
                 this.$parent.globalData.userInfo = this.userInfo
                 this.$parent.globalData.openId = this.openId
+                // 获取当前桌子的请客单列表
+                this.getRoomList()
                 this.$apply()
               } else {
                 wx.showModal({
@@ -465,20 +422,6 @@ export default class index extends wepy.page {
         }
       }
     })
-  }
-  newroom() {
-    console.log('创建房间')
-    // 显示创建房间的浮层
-    this.newRoomDom = true
-  }
-
-  goorder() {
-    // 绑定用户身份，确认是否请客
-    // 请客--true  被请--false
-    this.$parent.globalData.dinner = false
-    console.log('进入房间')
-    // 进入房间列表页
-    this.$navigate('/pages/roomList')
   }
 }
 </script>

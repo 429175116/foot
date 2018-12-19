@@ -39,11 +39,12 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index', // 首页
       'pages/home', // 封面
+      'pages/index', // 首页
       'pages/cookbook', // 菜单(菜品选择)
       'pages/roomList', // 房间列表
-      'pages/shoppingCart', // 购物车(订单确认)
+      'pages/shoppingCart', // 购物车(订单确认--多人)
+      'pages/individualCart', // 购物车(订单确认--单人)
       'pages/pay' // 支付
     ],
     window: {
@@ -56,7 +57,9 @@ export default class extends wepy.app {
 
   globalData = {
     userInfo: null,
-    requestUrl: 'http://140.143.203.12:8094'
+    dinner: false,
+    // requestUrl: 'http://140.143.203.12:8094'
+    requestUrl: 'https://food.beaconway.cn'
   }
 }
 </script>

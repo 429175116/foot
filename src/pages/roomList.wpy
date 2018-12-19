@@ -107,7 +107,7 @@
           </view>
           <view class="info">
             <view>{{item.msater.nick_name}}</view>
-            <view>在请客</view>
+            <view>的房间</view>
             <!-- <view>桌号  A08</view> -->
           </view>
           <view class="button">
@@ -176,6 +176,14 @@ export default class Roomlist extends wepy.page {
         if (data.data.success) {
           // 获取当前桌请客列表
           this.listData = data.data.data
+          let openId = this.$parent.globalData.openId
+          let i = 0
+          for (i in this.listData) {
+            if (openId === this.listData[i].master_open_id) {
+              this.listData.splice(i, 1)
+              break
+            }
+          }
           this.$apply()
         } else {
           wx.showModal({
@@ -188,6 +196,7 @@ export default class Roomlist extends wepy.page {
   }
   goRoom(e) {
     this.password = ''
+    this.masterOpenId = ''
     this.password = e.currentTarget.dataset.password
     this.masterOpenId = e.currentTarget.dataset.masteropenid
     this.setpassword = true
@@ -196,8 +205,9 @@ export default class Roomlist extends wepy.page {
     this.setpawData = e.detail.value
   }
   setPassword() {
+    console.log(this.masterOpenId)
     if (this.setpawData === this.password) {
-      this.$redirect(`/pages/shoppingCart?bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masterOpenId=${this.masterOpenId}`)
+      this.$redirect(`/pages/shoppingCart?bistro_id=${this.$parent.globalData.bistro_id}&qrcode=${this.$parent.globalData.qr_code}&masteropenid=${this.masterOpenId}`)
     } else {
       wx.showModal({
         title: '',
