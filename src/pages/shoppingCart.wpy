@@ -453,7 +453,7 @@
 import wepy from 'wepy'
 export default class Shoppingcart extends wepy.page {
   config = {
-    navigationBarTitleText: '购物车'
+    navigationBarTitleText: '餐桌'
   }
   components = {
   }

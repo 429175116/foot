@@ -178,10 +178,10 @@
         <view class="name">序号</view>
         <view class="con">{{orderDetailData.sort_number}}</view>
       </view>
-      <view class="list">
+      <!-- <view class="list">
         <view class="name">单号</view>
         <view class="con">{{orderDetailData.order_number}}</view>
-      </view>
+      </view> -->
       <view class="list">
         <view class="name">桌号</view>
         <view class="con">{{deskName}}</view>

@@ -410,6 +410,14 @@ export default class Shoppingcart extends wepy.page {
 
   // 单人提交菜单流程发起  提交菜单=>支付=>打印
   individualconfirmOrder() {
+    if (this.cartData.length === 0) {
+      wepy.showModal({
+        title: '',
+        content: '请先点餐',
+        showCancel: false
+      })
+      return
+    }
     wx.showModal({
       title: '',
       content: '确认支付？',
