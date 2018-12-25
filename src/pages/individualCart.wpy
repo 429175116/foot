@@ -570,37 +570,9 @@ export default class Shoppingcart extends wepy.page {
   }
   // 买单
   async submitDataMoney() {
-    console.log('发起支付')
-    // this.printOrder(this.orderId, this.bistroId)
+    // console.log('发起支付')
     wx.request({
-      url: `${this.$parent.globalData.requestUrl}/api/testpay`,
-      method: 'PUT',
-      header: {
-        AuthrizeOpenId: this.openId
-      },
-      data: {
-        order_number: this.orderNumber
-      },
-      success: data => {
-        if (data.data.success) {
-          // 打印订单
-          this.printOrder(this.orderId, this.bistroId)
-          this.$redirect('/pages/pay')
-        } else {
-          wx.showModal({
-            title: '',
-            content: data.data.errmsg
-          })
-        }
-      }
-    })
-    // this.$redirect('/pages/pay')
-    return
-    // loading图片显示
-    // this.loadingImgShow = true
-    // this.$apply()
-    wx.request({
-      url: `${this.$parent.globalData.requestUrl}/api/beanPay`,
+      url: `${this.$parent.globalData.requestUrl}/api/payOrder/${this.$parent.globalData.order_id}`,
       method: 'POST',
       header: {
         AuthrizeOpenId: this.$parent.globalData.openId
@@ -617,18 +589,9 @@ export default class Shoppingcart extends wepy.page {
             'signType': data.data.data.config.signType,
             'paySign': data.data.data.config.paySign,
             'success': data => {
-              // loading图片隐藏
-              // this.loadingImgShow = false
-              this.$apply()
               // 打印订单
               this.printOrder(this.orderId, this.bistroId)
-              wepy.showModal({
-                title: '',
-                content: '买单成功',
-                showCancel: false
-              })
-              // 销毁当前页{跳转}
-              // this.$redirect('/pages/pay')
+              this.$redirect('/pages/pay')
             },
             'fail': data => {
               wepy.showModal({
@@ -686,11 +649,12 @@ export default class Shoppingcart extends wepy.page {
       success: data => {
         if (data.data.success) {
           this.cartData = data.data.data.shopping_cart.list
-          // let i = 0
-          // this.totalPrice = 0
-          // for (i in this.cartData) {
-          //   this.totalPrice += (this.cartData[i].product_information.discount * this.cartData[i].num)
-          // }
+          let i = 0
+          this.totalPrice = 0
+          for (i in this.cartData) {
+            this.totalPrice += (this.cartData[i].product_information.discount * this.cartData[i].num)
+          }
+          this.totalPrice = this.totalPrice.toFixed(2)
           this.$apply()
         } else {
           wx.showModal({

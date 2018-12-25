@@ -928,13 +928,8 @@ export default class Shoppingcart extends wepy.page {
   }
   // 买单
   async submitDataMoney(e) {
-    this.$redirect('/pages/pay')
-    return
-    // loading图片显示
-    // this.loadingImgShow = true
-    // this.$apply()
     await wx.request({
-      url: `${this.$parent.globalData.requestUrl}/api/beanPay`,
+      url: `${this.$parent.globalData.requestUrl}/api/payOrder/${this.$parent.globalData.order_id}`,
       method: 'POST',
       header: {
         AuthrizeOpenId: this.$parent.globalData.openId
@@ -951,14 +946,6 @@ export default class Shoppingcart extends wepy.page {
             'signType': data.data.data.config.signType,
             'paySign': data.data.data.config.paySign,
             'success': data => {
-              // loading图片隐藏
-              // this.loadingImgShow = false
-              this.$apply()
-              // wepy.showModal({
-              //   title: '',
-              //   content: '买单成功',
-              //   showCancel: false
-              // })
               // 销毁当前页{跳转}
               this.$redirect('/pages/pay')
             },
@@ -1070,7 +1057,7 @@ export default class Shoppingcart extends wepy.page {
           for (i in products) {
             price += parseFloat(products[i].total_amount)
           }
-          this.totalPrice = price
+          this.totalPrice = price.toFixed(2)
           this.$apply()
         } else {
           wx.showModal({
