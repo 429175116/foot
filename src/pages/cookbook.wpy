@@ -395,15 +395,9 @@
             <image class="organic_rice_pic" src="{{ item.img }}" />
             <view class="organic_rice_text">
               <view class="rice">{{ item.name }}</view>
-              <!-- <view class="sale">{{ item.description }}</view> -->
               <view class="sale">销量{{ item.sale_count }} | {{ item.status }}</view>
               <view class="discount">￥{{item.discount}}</view>
             </view>
-            <!-- <view class="increase" data-id="{{ item.id }}" @tap="setCart">
-              <icon class="iconfont">-</icon> 
-              <icon class="iconfont">10</icon>
-              <icon class="iconfont">+</icon>
-            </view> -->
             <view class="increase">
               <view class="numControl" wx:if="{{item.num > 0}}" data-index="{{index}}" data-num="{{item.num}}" @tap="quantityDown">-</view>
               <view class="num" wx:if="{{item.num > 0}}">{{ item.num }}</view>
@@ -416,10 +410,8 @@
       <view>
         <view class="cart" @tap="cartClick">
           <text class="bardge" wx:if="{{ cartData.length != 0 }}">{{ cartData.length }}</text>
-          <!-- <icon class="iconfont icon-cart products" @tap="cartClick">车</icon> -->
           <image src="/img/cartWhite.png" />
         </view>
-        <!-- <view class="shop-cart-wrapper"> -->
         <view class="cookBookCartShow">
           <view class="price-wrapper"  @tap="cartClick">
             <text class="price">￥{{allPrice}}元</text>
@@ -427,7 +419,6 @@
           </view>
           <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
         </view>
-        <!-- </view> -->
         <view class="main-wrapper" wx:if="{{showSelFont}}">
           <view class="main-wrapper"  @tap="cartClick"></view>
           <view class="shop-cart-wrapper">
@@ -443,11 +434,6 @@
             <view class="products-wrapper">
               <repeat for="{{ cartData }}" item="item">
                 <view class="product-item" data-id="{{ item.id }}">
-                  <!-- <view>
-                    <checkbox-group data-wpychangeselect-a="">
-                      <checkbox value="1" checked=""></checkbox>
-                    </checkbox-group>
-                  </view> -->
                   <view class="product-pic">
                     <image src="{{ item.img }}" />
                   </view>
@@ -472,13 +458,6 @@
                 </view>
               </repeat>
             </view>
-            <!-- <view class="payment-wrapper">
-              <view class="price-wrapper">
-                <text class="price">￥{{allPrice}}元</text>
-                <text class="delivery-price">{{cartData.length}}样{{allNum}}份</text>
-              </view>
-              <view class="goto-payment-wrapper" @tap="settlement">点好了</view>
-            </view> -->
           </view>
         </view>
       </view>
@@ -534,23 +513,25 @@
       // let num = e.currentTarget.dataset.num
       // 下标
       let index = e.currentTarget.dataset.index
-      let cookDataList = this.menu
-      cookDataList[index].num += 1
-
-      this.menu = cookDataList
-      let upCartDataJson = []
-      let i = 0
-      this.allNum = 0
-      this.allPrice = 0
-      for (i in cookDataList) {
-        if (cookDataList[i].num > 0) {
-          this.allPrice += parseFloat(cookDataList[i].discount) * cookDataList[i].num
-          this.allNum += cookDataList[i].num
-          // 菜品加入购物车
-          upCartDataJson.push(cookDataList[i])
+      let cookDataList = this.menu[index]
+      
+      let thisDataPresence = false
+      for (let i in this.cartData) {
+        if (cookDataList.id === this.cartData[i].id) {
+          thisDataPresence = true
+          index = i
+          break
         }
       }
-      this.cartData = upCartDataJson
+      if (!thisDataPresence) {
+        cookDataList.num += 1
+        this.cartData.push(cookDataList)
+      } else {
+        this.cartData[index].num += 1
+      }
+      this.countAllQuantity(this.cartData)
+      // 更新菜单数量
+      this.upDataMenuNum()
       this.$apply()
     }
     quantityDown(e) {
@@ -558,27 +539,33 @@
       let num = e.currentTarget.dataset.num
       // 下标
       let index = e.currentTarget.dataset.index
-      let cookDataList = this.menu
-      if (num === 0) {
-        return
-      }
-      cookDataList[index].num -= 1
-      this.menu = cookDataList
-      let upCartDataJson = []
-      let i = 0
-      this.allNum = 0
-      this.allPrice = 0
-      for (i in cookDataList) {
-        if (cookDataList[i].num > 0) {
-          this.allPrice += parseFloat(cookDataList[i].discount) * cookDataList[i].num
-          this.allNum += cookDataList[i].num
-          // 菜品加入购物车
-          upCartDataJson.push(cookDataList[i])
+      let cookDataList = this.menu[index]
+      for (let i in this.cartData) {
+        if (cookDataList.id === this.cartData[i].id) {
+          if (this.cartData[i].num > 1) {
+            this.cartData[i].num -= 1
+          } else {
+            this.cartData[i].num -= 1
+            // this.cartData.splice(i, 1)
+          }
+          break
         }
       }
-      this.cartData = upCartDataJson
+      console.log(this.cartData)
+      this.countAllQuantity(this.cartData)
+      // 更新菜单数量
+      this.upDataMenuNum()
     }
-
+    // 更新菜单数量
+    upDataMenuNum() {
+      for (let i = 0; i < this.menu.length; i++) {
+        for (let z in this.cartData) {
+          if (this.menu[i].id === this.cartData[z].id) {
+            this.menu[i]['num'] = this.cartData[z].num
+          }
+        }
+      }
+    }
     cartClick() {
       if (this.showSelFont) {
         this.showSelFont = false
@@ -648,6 +635,8 @@
               // 加入选择个数，默认为0，用于和点餐时存储数量
               this.menu[i]['num'] = 0
             }
+            // 更新菜单数量
+            this.upDataMenuNum()
             this.nextUrl = ''
             if (data.meta.pagination.links.length !== 0) {
               this.nextUrl = data.meta.pagination.links.next
@@ -708,17 +697,20 @@
       let i = 0
       for (i in this.cartData) {
         if (menuId === this.cartData[i].id) {
-          this.cartData[i].num -= 1
-          // 计入总价
-          this.allPrice -= parseFloat(this.cartData[i].discount)
+          
           if (num === 1) {
-            this.cartData.splice(i, 1)
+            this.cartData[i].num = 0
+            // this.cartData.splice(i, 1)
+          } else {
+            this.cartData[i].num -= 1
           }
           break
         }
       }
       // 计算份数
-      this.allNum = this.countAllQuantity(this.cartData)
+      this.countAllQuantity(this.cartData)
+      // 更新菜单数量
+      this.upDataMenuNum()
     }
     // 数量加++++++
     numUp(e) {
@@ -729,21 +721,28 @@
         if (menuId === this.cartData[i].id) {
           this.cartData[i].num += 1
           // 计入总价
-          this.allPrice += parseFloat(this.cartData[i].discount)
+          // this.allPrice += parseFloat(this.cartData[i].discount)
           break
         }
       }
       // 计算份数
-      this.allNum = this.countAllQuantity(this.cartData)
+      this.countAllQuantity(this.cartData)
+      // 更新菜单数量
+      this.upDataMenuNum()
     }
     // 计算份数
     countAllQuantity(numList) {
+      console.log('===============')
       let i = 0
       let num = 0
+      let allPrice = 0
       for (i in numList) {
         num += numList[i].num
+        allPrice += parseFloat(numList[i].discount * numList[i].num)
       }
-      return num
+      this.allPrice = allPrice
+      console.log(allPrice)
+      this.allNum = num
     }
     // 清空
     delCartDataAll() {

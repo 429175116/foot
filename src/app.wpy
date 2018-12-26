@@ -58,7 +58,7 @@ export default class extends wepy.app {
   globalData = {
     userInfo: null,
     dinner: false,
-    // requestUrl: 'http://140.143.203.12:8094'
+    // requestUrl: 'http://140.143.203.12:8094',
     requestUrl: 'https://food.beaconway.cn',
     // 'https://food.beaconway.cn/uploads/images/homeBg.png'
     requestImgUrl: 'https://food.beaconway.cn/uploads/images/',
