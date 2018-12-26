@@ -256,6 +256,9 @@
     align-items:center;
     justify-content:flex-end;
   }
+  .decrease,.increase {
+    justify-content:center !important;
+  }
   .count-wrapper {
     flex:1;
     display:flex;
