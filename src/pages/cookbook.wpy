@@ -517,7 +517,6 @@
       // 下标
       let index = e.currentTarget.dataset.index
       let cookDataList = this.menu[index]
-      
       let thisDataPresence = false
       for (let i in this.cartData) {
         if (cookDataList.id === this.cartData[i].id) {
@@ -539,7 +538,7 @@
     }
     quantityDown(e) {
       // 商品数量
-      let num = e.currentTarget.dataset.num
+      // let num = e.currentTarget.dataset.num
       // 下标
       let index = e.currentTarget.dataset.index
       let cookDataList = this.menu[index]
@@ -700,7 +699,6 @@
       let i = 0
       for (i in this.cartData) {
         if (menuId === this.cartData[i].id) {
-          
           if (num === 1) {
             this.cartData[i].num = 0
             // this.cartData.splice(i, 1)
@@ -743,7 +741,7 @@
         num += numList[i].num
         allPrice += parseFloat(numList[i].discount * numList[i].num)
       }
-      this.allPrice = allPrice
+      this.allPrice = allPrice.toFixed(2)
       console.log(allPrice)
       this.allNum = num
     }
@@ -766,8 +764,10 @@
       // 根据已经选中的菜品数据生成需要提交订单从菜品数据
       let i = 0
       for (i in cartData) {
-        let cartJson = {'product_id': cartData[i].id, 'num': cartData[i].num}
-        upCartData.push(cartJson)
+        if (cartData[i].num > 0) {
+          let cartJson = {'product_id': cartData[i].id, 'num': cartData[i].num}
+          upCartData.push(cartJson)
+        }
       }
       if (this.$parent.globalData.mode) {
         this.addShoppingCart = 'addShoppingCartOneTime'
