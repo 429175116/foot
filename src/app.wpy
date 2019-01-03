@@ -45,6 +45,8 @@ export default class extends wepy.app {
       'pages/roomList', // 房间列表
       'pages/shoppingCart', // 购物车(订单确认--多人)
       'pages/individualCart', // 购物车(订单确认--单人)
+      'pages/orderList', // 订单列表
+      'pages/orderInfo', // 订单详情
       'pages/pay' // 支付
     ],
     window: {

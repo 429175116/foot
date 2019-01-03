@@ -76,8 +76,31 @@
     font-size: 20rpx !important;
     text-align: center;
   }
+  movable-view,movable-area {
+    width: auto;
+    height: auto;
+  }
+  movable-view{
+    width: 120rpx;
+    height: 120rpx;
+    position: absolute;
+    top: 80vh;
+    left: 10rpx;
+  }
+  .myOrder{
+    width: 60rpx;
+    height: 60rpx;
+    // line-height: 60rpx;
+    background-color: #f4525e;
+    color: #fff;
+    border-radius: 50rpx;
+    padding: 20rpx;
+    font-size: 25rpx;
+    text-align: center;
+  }
 </style>
 <template>
+<movable-area>
   <scroll-view scroll-y="hidden">
     <image src="{{requestImgUrl}}homeBg.png" class="bgimg" style="height:{{pageHieht}}px" />
     <view class="title">贝肯伟点餐系统</view>
@@ -95,7 +118,11 @@
         <view @tap="developerAddress">陕西省西安市高新区天谷八路软件新城研发基地二期A9栋405</view>
       </view>
     </view>
+    <movable-view direction="all" style="transform:translateX(100vh) translateY(0vh) translateZ(0px) scale(1);">
+      <view @tap="goOrderList" class="myOrder">我的订单</view>
+    </movable-view>
   </scroll-view>
+</movable-area>
 </template>
 
 <script>
@@ -128,6 +155,10 @@ export default class Pay extends wepy.page {
           }
         })
       }
+    },
+    // 进入订单列表页
+    goOrderList() {
+      this.$navigate('/pages/orderList')
     }
   }
   onLoad(e) {

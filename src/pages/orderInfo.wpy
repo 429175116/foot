@@ -1,0 +1,138 @@
+<style lang="less">
+scroll-view{
+  height: auto;
+}
+  .order, .info{
+    width: 700rpx;
+    height: auto;
+    background-color: #fff;
+    margin: auto;
+    margin-top: 20rpx;
+  }
+  .order .title{
+    text-align: center;
+    width: 100%;
+    height: 62rpx;
+    line-height: 62rpx;
+    color: #333;
+    font-size: 30rpx;
+    font-weight: 600;
+  }
+  .order .sontitle{
+    text-align: left;
+    width: 100%;
+    height: 57rpx;
+    line-height: 57rpx;
+    color: #4a4a4a;
+    font-size: 30rpx;
+    padding: 0 20rpx;
+  }
+  .order .orderList, .orderListTitle{
+    padding: 0 20rpx;
+    height: auto;
+    padding-bottom: 60rpx;
+    font-size: 25rpx;
+  }
+  .orderListTitle .name,
+  .orderListTitle .num,
+  .orderListTitle .price{
+    color: #333 !important;
+  }
+  .order .list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 57rpx;
+    line-height: 57rpx;
+    border-bottom: 1rpx dashed #e6e6e6;
+  }
+  .order .name, .order .num{
+    text-align: left;
+  }
+  .order .name{
+    width: 317rpx;
+    color: #666;
+  }
+  .order .num{
+    color: #aaa;
+    width: 150rpx;
+  }
+  .order .price{
+    text-align: right;
+    width: 200rpx;
+    color: #666;
+  }
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+    <view class="order">
+      <view class="title">{{shopName}}店铺名店铺名</view>
+      <!-- <view class="sontitle">香辣虾</view> -->
+      <view class="orderListTitle">
+        <view class="list">
+          <view class="name">名称</view>
+          <view class="num">数量</view>
+          <view class="price">小计</view>
+        </view>
+      </view>
+      <view class="orderList">
+        <view class="list">
+        <view class="name">{{'菜名'}}</view>
+        <view class="num">{{10}}份</view>
+        <view class="price">￥{{20}}</view>
+        </view>
+      </view>
+      <view class="orderList">
+        <view class="list">
+        <view class="name">{{'菜名'}}</view>
+        <view class="num">{{10}}份</view>
+        <view class="price">￥{{20}}</view>
+        </view>
+      </view>
+      <view class="orderList">
+        <view class="list">
+        <view class="name">{{'菜名'}}</view>
+        <view class="num">{{10}}份</view>
+        <view class="price">￥{{20}}</view>
+        </view>
+      </view>
+      <repeat for="{{ orderDetailData.products }}" item="item">
+        <view class="orderList">
+          <view class="list">
+            <view class="name">{{ item.product_infomation.product.name }}</view>
+            <view class="num">{{item.num}}份</view>
+            <view class="price">￥{{ item.product_infomation.product.discount }}</view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </scroll-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Orderinfo extends wepy.page {
+  config = {
+    navigationBarTitleText: '订单详情',
+    disableScroll: true
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+    pageHieht: 0,
+    requestImgUrl: ''
+  }
+
+  methods = {
+    // 拨打公司电话
+    developerPhone(e) {
+      // orderInfo?
+      this.$navigate('/pages/orderInfo')
+    }
+  }
+  onLoad(e) {
+   
+  }
+}
+</script>

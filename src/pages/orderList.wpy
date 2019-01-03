@@ -1,0 +1,110 @@
+<style lang="less">
+scroll-view{
+  height: auto;
+}
+.winDetail {
+  width: 95%;
+  border: 1px solid #eee;
+  border-radius: 20rpx;
+  height: 160rpx;
+  margin: 20rpx 2.5%;
+  color: #333;
+  box-sizing: border-box;
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winDetail_center {
+  width: 520rpx;
+  margin-left: 20rpx;
+  font-size: 40rpx;
+}
+
+.winDetail_center view {
+  width: 500rpx;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.winDetail_text {
+  font-size: 28rpx;
+  margin-top: 10rpx;
+}
+
+.winDetail_right {
+  width: 250rpx;
+  margin-right: 20rpx;
+  text-align: right;
+  font-size: 20rpx;
+  line-height: 35rpx;
+}
+
+.winDetail_title {
+  font-size: 26rpx;
+  color: #ef3f22;
+}
+</style>
+<template>
+  <scroll-view scroll-y="hidden">
+    <view class="containerleft">
+      <view class="winDetail" @tap="goOrderInfo">
+        <view class="winDetail_center">
+          <view>店铺:{{'店铺名店铺名店铺名'}}</view>
+          <view class="winDetail_text">时间:{{'时间时间时间时间'}}</view>
+        </view>
+        <view class="winDetail_right">
+          <view>{{item.date}}</view>
+          <view>{{item.time}}</view>
+          <view class="winDetail_title">序号:{{'2234'}}</view>
+        </view>
+      </view>
+      <repeat for="{{ menuClass }}" item="item">
+        <view class="winDetail">
+          <view class="winDetail_img">
+            <image src="{{userInfo.avatarUrl}}" class=""/>
+          </view>
+          <view class="winDetail_center">
+            <view>店铺:{{item.shop_id}}</view>
+            <view class="winDetail_text">广告:{{item.uuid}}</view>
+          </view>
+          <view class="winDetail_right">
+            <view>{{item.date}}</view>
+            <view>{{item.time}}</view>
+            <view class="winDetail_title">电话:{{item.phone}}</view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </scroll-view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Orderlist extends wepy.page {
+  config = {
+    navigationBarTitleText: '我的订单',
+    disableScroll: true
+  }
+  components = {
+  }
+  mixins = []
+  data = {
+    pageHieht: 0,
+    requestImgUrl: ''
+  }
+
+  methods = {
+    // 拨打公司电话
+    goOrderInfo(e) {
+      // orderInfo?
+      this.$navigate('/pages/orderInfo')
+    }
+  }
+  onLoad(e) {
+   
+  }
+}
+</script>
