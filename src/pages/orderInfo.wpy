@@ -15,7 +15,7 @@ scroll-view{
     height: 62rpx;
     line-height: 62rpx;
     color: #333;
-    font-size: 30rpx;
+    font-size: 35rpx;
     font-weight: 600;
   }
   .order .sontitle{
@@ -26,17 +26,6 @@ scroll-view{
     color: #4a4a4a;
     font-size: 30rpx;
     padding: 0 20rpx;
-  }
-  .order .orderList, .orderListTitle{
-    padding: 0 20rpx;
-    height: auto;
-    padding-bottom: 60rpx;
-    font-size: 25rpx;
-  }
-  .orderListTitle .name,
-  .orderListTitle .num,
-  .orderListTitle .price{
-    color: #333 !important;
   }
   .order .list{
     display: flex;
@@ -62,11 +51,71 @@ scroll-view{
     width: 400rpx;
     color: #666;
   }
+  .total_amount{
+    height: 70rpx !important;
+    line-height: 70rpx !important;
+  }
+  .total_amount view{
+    font-size: 40rpx;
+    font-weight: 600;
+    height: 70rpx !important;
+    line-height: 70rpx !important;
+  }
+  .total_amount .price{
+    color: #CC3300;
+  }
+  .orderCon{
+    width: 710rpx;
+    height: auto;
+  }
+  .orderCon view{
+    text-align: left !important;
+  }
+  .orderCon .list{
+    padding: 30rpx 0;
+    width: 710rpx;
+    height: 200rpx;
+    border-bottom: 1rpx solid #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .orderCon .list .sel:nth-child(1){
+    height: 200rpx;
+    width: 120rpx;
+  }
+  .orderCon .list .sel:nth-child(2){
+    height: 200rpx;
+    width: 590rpx
+  }
+  .orderCon image{
+    width: 100rpx;
+    height: 100rpx;
+  }
+  .orderCon .name{
+    font-size: 35rpx;
+    font-weight: 600;
+
+  }
 </style>
 <template>
   <scroll-view scroll-y="hidden">
     <view class="order">
       <view class="title">单号:{{orderInfo.order_number}}</view>
+      <view class="orderCon">
+        <repeat for="{{ orderInfo.products }}" item="item">
+          <view class="list">
+            <view class="sel">
+              <image src="{{'https://www.qu.la/BookFiles/BookImages/futianshi.jpg'}}"/>
+            </view>
+            <view class="sel">
+              <view class="name">{{ item.product_infomation.product.name }}</view>
+              <view class="num">数量：{{item.num}}份</view>
+              <view class="price">总价：￥{{ item.product_infomation.product.discount }}</view>
+            </view>
+          </view>
+        </repeat>
+      </view>
       <view class="orderList">
         <view class="list">
           <view class="name">序号</view>
@@ -79,11 +128,6 @@ scroll-view{
           <view class="price">{{orderInfo.position_id}}桌</view>
         </view>
         <view class="list">
-          <view class="name">付款</view>
-          <view class="num"></view>
-          <view class="price">￥{{orderInfo.total_amount}}</view>
-        </view>
-        <view class="list">
           <view class="name">状态</view>
           <view class="num"></view>
           <view class="price">{{orderInfo.order_status}}/{{orderInfo.status}}</view>
@@ -93,32 +137,12 @@ scroll-view{
           <view class="num"></view>
           <view class="price">{{orderInfo.created_at}}</view>
         </view>
-      </view>
-      <view class="orderListTitle">
-        <view class="list">
-          <view class="name">名称</view>
-          <view class="num">数量</view>
-          <view class="price">小计</view>
+        <view class="list total_amount">
+          <view class="name">付款</view>
+          <view class="num"></view>
+          <view class="price">￥{{orderInfo.total_amount}}</view>
         </view>
       </view>
-      <view class="orderList">
-        <repeat for="{{ orderInfo.products }}" item="item">
-          <view class="list">
-            <view class="name">{{ item.product_infomation.product.name }}</view>
-            <view class="num">{{item.num}}份</view>
-            <view class="price">￥<p>{{ item.product_infomation.product.discount }}</p></view>
-          </view>
-        </repeat>
-      </view>
-      <repeat for="{{ orderDetailData.products }}" item="item">
-        <view class="orderList">
-          <view class="list">
-            <view class="name">{{ item.product_infomation.product.name }}</view>
-            <view class="num">{{item.num}}份</view>
-            <view class="price">￥{{ item.product_infomation.product.discount }}</view>
-          </view>
-        </view>
-      </repeat>
     </view>
   </scroll-view>
 </template>
