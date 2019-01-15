@@ -50,30 +50,15 @@ scroll-view{
 <template>
   <scroll-view scroll-y="hidden">
     <view class="containerleft">
-      <view class="winDetail" @tap="goOrderInfo">
-        <view class="winDetail_center">
-          <view>店铺:{{'店铺名店铺名店铺名'}}</view>
-          <view class="winDetail_text">时间:{{'时间时间时间时间'}}</view>
-        </view>
-        <view class="winDetail_right">
-          <view>{{item.date}}</view>
-          <view>{{item.time}}</view>
-          <view class="winDetail_title">序号:{{'2234'}}</view>
-        </view>
-      </view>
-      <repeat for="{{ menuClass }}" item="item">
-        <view class="winDetail">
-          <view class="winDetail_img">
-            <image src="{{userInfo.avatarUrl}}" class=""/>
-          </view>
+      <repeat for="{{ orderList }}" item="item">
+        <view class="winDetail" @tap="goOrderInfo" data-id="{{item.id}}">
           <view class="winDetail_center">
-            <view>店铺:{{item.shop_id}}</view>
-            <view class="winDetail_text">广告:{{item.uuid}}</view>
+            <view>单号:{{item.order_number}}</view>
+            <view class="winDetail_text">状态:{{item.status}}/{{item.order_status}}</view>
           </view>
           <view class="winDetail_right">
-            <view>{{item.date}}</view>
-            <view>{{item.time}}</view>
-            <view class="winDetail_title">电话:{{item.phone}}</view>
+            <view>{{item.created_at}}</view>
+            <view class="winDetail_title">序号:{{item.sort_number}}</view>
           </view>
         </view>
       </repeat>
@@ -85,26 +70,127 @@ scroll-view{
 import wepy from 'wepy'
 export default class Orderlist extends wepy.page {
   config = {
-    navigationBarTitleText: '我的订单',
-    disableScroll: true
+    navigationBarTitleText: '我的订单'
   }
   components = {
   }
   mixins = []
   data = {
     pageHieht: 0,
-    requestImgUrl: ''
+    requestImgUrl: '',
+    orderList: []
   }
 
   methods = {
     // 拨打公司电话
     goOrderInfo(e) {
-      // orderInfo?
-      this.$navigate('/pages/orderInfo')
+      let id = e.currentTarget.dataset.id
+      this.$navigate(`/pages/orderInfo?id=${id}`)
     }
   }
   onLoad(e) {
-   
+    this.onGetUserInfo()
+  }
+  async onGetUserInfo() {
+    // 查看是否授权
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+          wx.getUserInfo({
+            success: res => {
+              this.userInfo = res.userInfo
+              if (this.userInfo) {
+                this.authorizationButton = false
+                this.avatarUrl = this.userInfo.avatarUrl
+                this.nickName = this.userInfo.nickName
+                // 数据生效
+                this.$apply()
+                // 提交用户信息
+                this.setUserInfo(this.userInfo)
+                // 登陆
+                // this.userLogin(this.userInfo)
+                this.$parent.globalData.userInfo = this.userInfo
+                this.$apply()
+              }
+            }
+          })
+        }
+      }
+    })
+  }
+    // 提交用户信息
+  async setUserInfo(userInfo) {
+    if (this.$parent.globalData.openId) {
+      // 获取当前桌子的请客单列表
+      this.getRoomList()
+      return
+    }
+    wepy.login({
+      success: res => {
+        if (res.code) {
+          this.code = res.code
+          wx.request({
+            url: `${this.$parent.globalData.requestUrl}/api/createOrUpdateUser`,
+            method: 'POST',
+            data: {
+              code: res.code,
+              nick_name: this.userInfo.nickName,
+              profile: this.userInfo.avatarUrl
+            },
+            success: data => {
+              if (data.data.success) {
+                // 获取用户信息,及openID  并存入全局
+                this.userInfo = data.data.user
+                this.openId = this.userInfo.open_id
+                this.$parent.globalData.userInfo = this.userInfo
+                this.$parent.globalData.openId = this.openId
+                this.getOrderList()
+                // 获取当前桌子的请客单列表
+                this.getRoomList()
+                this.$apply()
+              } else {
+                wx.showModal({
+                  title: '',
+                  content: data.data.errmsg
+                })
+              }
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+    })
+  }
+  // 获取当前桌子的请客单列表,用于判断是否已经创建房间
+  getOrderList() {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/orderList`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      success: data => {
+        if (data.data.success) {
+          data = data.data.data.orders
+          this.orderList = data.data
+          let i = 0
+          for (i in this.orderList) {
+            this.orderList[i].created_at = this.orderList[i].created_at.split(' ')[0]
+          }
+          if (data.meta.pagination.links) {
+            this.nextUrl = data.meta.pagination.links.next
+          }
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
   }
 }
 </script>

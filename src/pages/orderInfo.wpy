@@ -59,15 +59,41 @@ scroll-view{
   }
   .order .price{
     text-align: right;
-    width: 200rpx;
+    width: 400rpx;
     color: #666;
   }
 </style>
 <template>
   <scroll-view scroll-y="hidden">
     <view class="order">
-      <view class="title">{{shopName}}店铺名店铺名</view>
-      <!-- <view class="sontitle">香辣虾</view> -->
+      <view class="title">单号:{{orderInfo.order_number}}</view>
+      <view class="orderList">
+        <view class="list">
+          <view class="name">序号</view>
+          <view class="num"></view>
+          <view class="price">{{orderInfo.sort_number}}</view>
+        </view>
+        <view class="list">
+          <view class="name">桌号</view>
+          <view class="num"></view>
+          <view class="price">{{orderInfo.position_id}}桌</view>
+        </view>
+        <view class="list">
+          <view class="name">付款</view>
+          <view class="num"></view>
+          <view class="price">￥{{orderInfo.total_amount}}</view>
+        </view>
+        <view class="list">
+          <view class="name">状态</view>
+          <view class="num"></view>
+          <view class="price">{{orderInfo.order_status}}/{{orderInfo.status}}</view>
+        </view>
+        <view class="list">
+          <view class="name">时间</view>
+          <view class="num"></view>
+          <view class="price">{{orderInfo.created_at}}</view>
+        </view>
+      </view>
       <view class="orderListTitle">
         <view class="list">
           <view class="name">名称</view>
@@ -76,25 +102,13 @@ scroll-view{
         </view>
       </view>
       <view class="orderList">
-        <view class="list">
-        <view class="name">{{'菜名'}}</view>
-        <view class="num">{{10}}份</view>
-        <view class="price">￥{{20}}</view>
-        </view>
-      </view>
-      <view class="orderList">
-        <view class="list">
-        <view class="name">{{'菜名'}}</view>
-        <view class="num">{{10}}份</view>
-        <view class="price">￥{{20}}</view>
-        </view>
-      </view>
-      <view class="orderList">
-        <view class="list">
-        <view class="name">{{'菜名'}}</view>
-        <view class="num">{{10}}份</view>
-        <view class="price">￥{{20}}</view>
-        </view>
+        <repeat for="{{ orderInfo.products }}" item="item">
+          <view class="list">
+            <view class="name">{{ item.product_infomation.product.name }}</view>
+            <view class="num">{{item.num}}份</view>
+            <view class="price">￥<p>{{ item.product_infomation.product.discount }}</p></view>
+          </view>
+        </repeat>
       </view>
       <repeat for="{{ orderDetailData.products }}" item="item">
         <view class="orderList">
@@ -113,13 +127,13 @@ scroll-view{
 import wepy from 'wepy'
 export default class Orderinfo extends wepy.page {
   config = {
-    navigationBarTitleText: '订单详情',
-    disableScroll: true
+    navigationBarTitleText: '订单详情'
   }
   components = {
   }
   mixins = []
   data = {
+    orderInfo: null,
     pageHieht: 0,
     requestImgUrl: ''
   }
@@ -132,7 +146,28 @@ export default class Orderinfo extends wepy.page {
     }
   }
   onLoad(e) {
-   
+    this.getOrder(e.id)
+  }
+  getOrder(id) {
+    wx.request({
+      url: `${this.$parent.globalData.requestUrl}/api/orderDetail/${id}`,
+      method: 'GET',
+      header: {
+        AuthrizeOpenId: this.$parent.globalData.openId
+      },
+      success: data => {
+        if (data.data.success) {
+          this.orderInfo = data.data.data.order
+          this.orderInfo.total_amount = this.orderInfo.total_amount.toFixed(2)
+          this.$apply()
+        } else {
+          wx.showModal({
+            title: '',
+            content: data.data.errmsg
+          })
+        }
+      }
+    })
   }
 }
 </script>
